@@ -1,0 +1,40 @@
+{
+  "expectations": [
+    {
+      "text": "ADR file created",
+      "passed": true,
+      "evidence": "matched"
+    },
+    {
+      "text": "Captures technical decision: event-driven / Kafka vs REST",
+      "passed": true,
+      "evidence": "matched"
+    },
+    {
+      "text": "Surfaces PSD2 / Open Banking regulatory dimension",
+      "passed": true,
+      "evidence": "matched"
+    },
+    {
+      "text": "Uses uncertainty markers for unspecified regulated dims",
+      "passed": false,
+      "evidence": "not found in output"
+    },
+    {
+      "text": "Includes risk, security, and resilience considerations",
+      "passed": false,
+      "evidence": "not found in output"
+    },
+    {
+      "text": "Does not assert unprovided compliance conclusions/approvers",
+      "passed": false,
+      "evidence": "not found in output"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 3,
+    "total": 6,
+    "pass_rate": 0.5
+  }
+}

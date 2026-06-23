@@ -1,0 +1,13 @@
+{
+  "eval_id": 2,
+  "eval_name": "eval-2-kafka-openbanking",
+  "prompt": "We're rearchitecting our open banking APIs to an event-driven design using Kafka instead of synchronous REST calls between services. Lower latency, better decoupling. Write an ADR for this.",
+  "assertions": [
+    {"text": "An ADR markdown file was created (under docs/adr or an existing convention)"},
+    {"text": "Captures the technical decision: event-driven / Kafka replacing synchronous REST"},
+    {"text": "Surfaces the open banking / PSD2 regulatory dimension even though the prompt did not mention it"},
+    {"text": "Uses uncertainty markers (e.g. [NEEDS COMPLIANCE/RISK REVIEW], [OPEN QUESTION]) for regulated dimensions not specified, rather than fabricating a compliance assessment"},
+    {"text": "Includes risk, security, and resilience considerations relevant to the change"},
+    {"text": "Does NOT assert specific compliance conclusions, control IDs, or approvers that were not provided"}
+  ]
+}

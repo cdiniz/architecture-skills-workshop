@@ -1,0 +1,14 @@
+{
+  "eval_id": 1,
+  "eval_name": "eval-1-data-residency",
+  "prompt": "Document our decision to host the core banking ledger in AWS eu-west-1, with a read replica in eu-central-1 for disaster recovery. We considered an on-prem option and a multi-cloud option. This needs to go to the architecture review board next week. Put it in docs/adr.",
+  "assertions": [
+    {"text": "An ADR markdown file was created under docs/adr with a zero-padded sequential number in the filename"},
+    {"text": "Documents the options considered, including on-prem and multi-cloud alongside the chosen AWS option"},
+    {"text": "Addresses data residency / sovereignty, referencing the EU regions (eu-west-1 / eu-central-1)"},
+    {"text": "Addresses resilience / disaster recovery, including RTO/RPO or failover considerations"},
+    {"text": "Notes cloud concentration or third-party / outsourcing risk"},
+    {"text": "Approvals section names the architecture review board as a required sign-off"},
+    {"text": "Does NOT fabricate specific risk ratings, regulations, or approvers beyond what was provided — gaps are marked rather than invented"}
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "expectations": [
+    {
+      "text": "ADR file created under docs/adr with zero-padded number",
+      "passed": true,
+      "evidence": "matched"
+    },
+    {
+      "text": "Documents options incl. on-prem and multi-cloud",
+      "passed": true,
+      "evidence": "matched"
+    },
+    {
+      "text": "Addresses data residency/sovereignty with EU regions",
+      "passed": true,
+      "evidence": "matched"
+    },
+    {
+      "text": "Addresses resilience / DR (RTO/RPO/failover)",
+      "passed": true,
+      "evidence": "matched"
+    },
+    {
+      "text": "Notes cloud concentration / third-party risk",
+      "passed": true,
+      "evidence": "matched"
+    },
+    {
+      "text": "Approvals section names architecture review board",
+      "passed": true,
+      "evidence": "matched"
+    },
+    {
+      "text": "Does not fabricate \u2014 gaps marked",
+      "passed": true,
+      "evidence": "matched"
+    }
+  ],
+  "summary": {
+    "passed": 7,
+    "failed": 0,
+    "total": 7,
+    "pass_rate": 1.0
+  }
+}

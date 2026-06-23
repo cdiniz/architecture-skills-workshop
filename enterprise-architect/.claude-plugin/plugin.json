@@ -1,0 +1,18 @@
+{
+  "name": "enterprise-architect",
+  "description": "Skills for enterprise architects: capture architecture decisions (ADRs), model systems with the C4 model, assess quality attributes and trade-offs, and review designs against architecture principles.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Claudio Diniz",
+    "email": "claudio.diniz@equalexperts.com"
+  },
+  "license": "MIT",
+  "keywords": [
+    "architecture",
+    "enterprise-architecture",
+    "adr",
+    "c4-model",
+    "quality-attributes",
+    "governance"
+  ]
+}

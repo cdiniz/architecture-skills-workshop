@@ -1,0 +1,34 @@
+{
+  "name": "architecture-skills-workshop",
+  "owner": {
+    "name": "Claudio Diniz",
+    "email": "claudio.diniz@equalexperts.com"
+  },
+  "metadata": {
+    "description": "A workshop marketplace of Claude Code skills for enterprise architects — covering architecture decisions, diagrams, quality attributes, and governance.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "enterprise-architect",
+      "description": "Skills for enterprise architects: capture architecture decisions (ADRs), model systems with the C4 model, assess quality attributes and trade-offs, and review designs against architecture principles.",
+      "author": {
+        "name": "Claudio Diniz",
+        "email": "claudio.diniz@equalexperts.com"
+      },
+      "license": "MIT",
+      "keywords": [
+        "architecture",
+        "enterprise-architecture",
+        "adr",
+        "c4-model",
+        "quality-attributes",
+        "governance",
+        "trade-offs",
+        "workshop"
+      ],
+      "source": "./enterprise-architect",
+      "category": "architecture"
+    }
+  ]
+}

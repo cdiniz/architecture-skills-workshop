@@ -1,0 +1,23 @@
+{
+  "skill_name": "financial-adr",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "We're going to stop storing raw card PANs directly in our payments database and switch to tokenisation through a third-party vault (the app only ever sees tokens). Write up an ADR for our payments platform. We don't have an adr directory yet, put it under docs/adr.",
+      "expected_output": "An ADR file under docs/adr (numbered, e.g. 0001-...). Should flag PCI DSS scope, data classification of cardholder data, third-party/vendor risk for the vault, security (key/token handling), and required approvals. Should not invent specific control IDs or approvers that weren't given.",
+      "files": []
+    },
+    {
+      "id": 1,
+      "prompt": "Document our decision to host the core banking ledger in AWS eu-west-1, with a read replica in eu-central-1 for disaster recovery. We considered an on-prem option and a multi-cloud option. This needs to go to the architecture review board next week. Put it in docs/adr.",
+      "expected_output": "An ADR covering options (on-prem, multi-cloud, chosen AWS), data residency/sovereignty (EU regions), resilience/RTO-RPO and DR, cloud concentration/third-party risk, and an approvals section naming the architecture review board. Gaps marked rather than fabricated.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "We're rearchitecting our open banking APIs to an event-driven design using Kafka instead of synchronous REST calls between services. Lower latency, better decoupling. Write an ADR for this.",
+      "expected_output": "An ADR that captures the technical decision but ALSO surfaces the unstated regulated dimensions for open banking (PSD2/Open Banking scope, customer data, security, resilience) using uncertainty markers like [NEEDS COMPLIANCE/RISK REVIEW] rather than inventing assessments. Tests gap-flagging vs hallucination.",
+      "files": []
+    }
+  ]
+}

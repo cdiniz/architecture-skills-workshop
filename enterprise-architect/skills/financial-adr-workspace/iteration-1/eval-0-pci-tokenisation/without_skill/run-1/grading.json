@@ -1,0 +1,45 @@
+{
+  "expectations": [
+    {
+      "text": "ADR file created under docs/adr with zero-padded number",
+      "passed": true,
+      "evidence": "matched"
+    },
+    {
+      "text": "Identifies PCI DSS as applicable regime",
+      "passed": true,
+      "evidence": "matched"
+    },
+    {
+      "text": "States data classification of cardholder data / PAN",
+      "passed": true,
+      "evidence": "matched"
+    },
+    {
+      "text": "Assesses third-party / vendor risk for the vault",
+      "passed": true,
+      "evidence": "matched"
+    },
+    {
+      "text": "Security section on token/key handling or PCI scope reduction",
+      "passed": true,
+      "evidence": "matched"
+    },
+    {
+      "text": "Includes approvals / sign-off section",
+      "passed": false,
+      "evidence": "not found in output"
+    },
+    {
+      "text": "Does not fabricate approvers/owners \u2014 unknowns marked",
+      "passed": false,
+      "evidence": "not found in output"
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 2,
+    "total": 7,
+    "pass_rate": 0.7143
+  }
+}

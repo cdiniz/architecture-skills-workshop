@@ -1,0 +1,14 @@
+{
+  "eval_id": 0,
+  "eval_name": "eval-0-pci-tokenisation",
+  "prompt": "We're going to stop storing raw card PANs directly in our payments database and switch to tokenisation through a third-party vault (the app only ever sees tokens). Write up an ADR for our payments platform. We don't have an adr directory yet, put it under docs/adr.",
+  "assertions": [
+    {"text": "An ADR markdown file was created under docs/adr with a zero-padded sequential number in the filename"},
+    {"text": "Identifies PCI DSS as the applicable regulatory regime"},
+    {"text": "States the data classification of cardholder data / PAN (e.g. cardholder data, sensitive)"},
+    {"text": "Assesses third-party / vendor risk for the external tokenisation vault"},
+    {"text": "Includes a security section addressing token/key handling or how PCI scope is reduced"},
+    {"text": "Includes an approvals / sign-off section"},
+    {"text": "Does NOT fabricate specific approver names, control IDs, or risk owners that were not provided — unknowns are marked with uncertainty markers instead"}
+  ]
+}
