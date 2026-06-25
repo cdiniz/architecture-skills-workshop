@@ -1,0 +1,50 @@
+{
+  "expectations": [
+    {
+      "text": "Includes Bram Hendriks (Domain Architect \u2014 Payments)",
+      "passed": true,
+      "evidence": "Tier 1, named most important."
+    },
+    {
+      "text": "Includes Aisha Khan (Tribe Lead \u2014 Payments)",
+      "passed": true,
+      "evidence": "Tier 1."
+    },
+    {
+      "text": "Includes Charlotte Dubois (Compliance) for PSD2",
+      "passed": true,
+      "evidence": "Tier 1."
+    },
+    {
+      "text": "Bram Hendriks and/or Aisha Khan scored highest (8-10)",
+      "passed": false,
+      "evidence": "No numeric scores; tier labels only."
+    },
+    {
+      "text": "Every listed stakeholder has a relevancy score from 1 to 10",
+      "passed": false,
+      "evidence": "No scores anywhere."
+    },
+    {
+      "text": "Every listed stakeholder has a written rationale naming the relevance axis",
+      "passed": true,
+      "evidence": "Each has a why."
+    },
+    {
+      "text": "Stakeholders are ordered by relevancy score, highest first",
+      "passed": false,
+      "evidence": "Grouped by prose tiers, not score."
+    },
+    {
+      "text": "No fabricated people outside the six synthetic-data entries",
+      "passed": false,
+      "evidence": "An 'Also pull in' section lists Maria Oliveira, Jonas Bakker, Hannah Schulz et al. as people to engage \u2014 surfacing unprofiled names as actionable stakeholders."
+    }
+  ],
+  "summary": {
+    "pass_rate": 0.5,
+    "passed": 4,
+    "failed": 4,
+    "total": 8
+  }
+}

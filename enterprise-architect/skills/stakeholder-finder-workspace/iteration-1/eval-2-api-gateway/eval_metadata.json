@@ -1,0 +1,14 @@
+{
+  "eval_id": 2,
+  "eval_name": "api-gateway-event-backbone",
+  "prompt": "Who do I need to talk to about standardising integration across domains — we're proposing a managed API gateway and a shared event backbone, and I want to retire a load of point-to-point batch interfaces.",
+  "assertions": [
+    {"text": "Includes Ahmed Benali (Integration Architect)", "rationale": "API contracts, event backbone, and point-to-point sprawl are verbatim his remit and concerns."},
+    {"text": "Ahmed Benali is the highest-scored stakeholder (8-10)", "rationale": "He is the clear owner; the ranking should reflect that."},
+    {"text": "Every listed stakeholder has a relevancy score from 1 to 10", "rationale": "Core output requirement."},
+    {"text": "Every listed stakeholder has a written rationale naming the relevance axis", "rationale": "Relevance must have a reason."},
+    {"text": "Stakeholders are ordered by relevancy score, highest first", "rationale": "Specified output ordering."},
+    {"text": "Does not list any person outside the six synthetic-data entries (no fabricated people)", "rationale": "No hallucinated stakeholders."},
+    {"text": "Only genuinely relevant people are listed; clearly off-topic people (e.g. Charlotte Dubois) are omitted or low-scored unless a reason is given", "rationale": "Precision over coverage."}
+  ]
+}

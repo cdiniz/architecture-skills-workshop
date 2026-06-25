@@ -1,0 +1,15 @@
+{
+  "eval_id": 1,
+  "eval_name": "instant-payments-modernisation",
+  "prompt": "We need to modernise our payment rails to support SEPA instant payments and the PSD2 deadlines are coming. Who are the stakeholders I need to align with?",
+  "assertions": [
+    {"text": "Includes Bram Hendriks (Domain Architect — Payments)", "rationale": "Payments architecture + PSD2/instant payments is his explicit remit and concern."},
+    {"text": "Includes Aisha Khan (Tribe Lead — Payments)", "rationale": "Payments delivery against regulatory deadlines is her remit."},
+    {"text": "Includes Charlotte Dubois (Compliance) for the PSD2 regulatory dimension", "rationale": "Regulatory deadlines engage the compliance concern axis."},
+    {"text": "Bram Hendriks and/or Aisha Khan are scored highest (8-10)", "rationale": "The most central owners should top the ranking."},
+    {"text": "Every listed stakeholder has a relevancy score from 1 to 10", "rationale": "Core output requirement."},
+    {"text": "Every listed stakeholder has a written rationale naming the relevance axis", "rationale": "Relevance must have a reason."},
+    {"text": "Stakeholders are ordered by relevancy score, highest first", "rationale": "Specified output ordering."},
+    {"text": "Does not list any person outside the six synthetic-data entries (no fabricated people)", "rationale": "No hallucinated stakeholders."}
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "expectations": [
+    {
+      "text": "Includes Ahmed Benali (Integration Architect)",
+      "passed": true,
+      "evidence": "10/10, owns it."
+    },
+    {
+      "text": "Ahmed Benali is the highest-scored stakeholder (8-10)",
+      "passed": true,
+      "evidence": "10/10, ranked first."
+    },
+    {
+      "text": "Every listed stakeholder has a relevancy score from 1 to 10",
+      "passed": true,
+      "evidence": "All ranked carry N/10."
+    },
+    {
+      "text": "Every listed stakeholder has a written rationale naming the relevance axis",
+      "passed": true,
+      "evidence": "Each cites axis."
+    },
+    {
+      "text": "Stakeholders are ordered by relevancy score, highest first",
+      "passed": true,
+      "evidence": "10,8,8,6,6 descending."
+    },
+    {
+      "text": "No fabricated people outside the six synthetic-data entries",
+      "passed": true,
+      "evidence": "FIXED: Mark van Dijk now in unscored 'referenced but not in wiki' note as top gap, not in ranking."
+    },
+    {
+      "text": "Only genuinely relevant people listed; off-topic people omitted or low-scored",
+      "passed": true,
+      "evidence": "Carlos deliberately left out (build-time)."
+    }
+  ],
+  "summary": {
+    "pass_rate": 1.0,
+    "passed": 7,
+    "failed": 0,
+    "total": 7
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "skill_name": "stakeholder-finder",
+  "notes": "Stakeholder data for these evals lives in enterprise-architect/syntethic-data/ (markdown entries with `type: stakeholder` frontmatter). Each eval prompt is what a real architect would type; the agent is told the repo path as context, the way a wiki CLAUDE.md would expose it.",
+  "evals": [
+    {
+      "id": 0,
+      "name": "cloud-data-migration",
+      "prompt": "I'm scoping a migration of our analytics data platform off on-prem into the cloud (AWS to Azure for the data warehouse). Some of it is customer financial data. Who should I be talking to before we commit to this?",
+      "expected_output": "Shortlist that includes Anika Sharma (data architecture), Carlos Mendes (cloud), and Charlotte Dubois (compliance — regulated/customer data), each with a rationale and a 1-10 score, ordered by score. Payments-only people not top-scored without a structural reason.",
+      "files": ["enterprise-architect/syntethic-data/"],
+      "assertions": [
+        "Includes Anika Sharma (Head of Data Architecture)",
+        "Includes Carlos Mendes (Cloud Architect)",
+        "Includes Charlotte Dubois (Compliance) because customer financial data is in scope",
+        "Every listed stakeholder has a relevancy score from 1 to 10",
+        "Every listed stakeholder has a written rationale naming the relevance axis",
+        "Stakeholders are ordered by relevancy score, highest first",
+        "No fabricated people outside the six synthetic-data entries",
+        "Payments specialists not top-scored (8-10) without an explicit structural reason"
+      ]
+    },
+    {
+      "id": 1,
+      "name": "instant-payments-modernisation",
+      "prompt": "We need to modernise our payment rails to support SEPA instant payments and the PSD2 deadlines are coming. Who are the stakeholders I need to align with?",
+      "expected_output": "Shortlist led by Bram Hendriks and Aisha Khan (payments), with Charlotte Dubois (compliance) and possibly Ahmed Benali, each with rationale and 1-10 score, ordered by score.",
+      "files": ["enterprise-architect/syntethic-data/"],
+      "assertions": [
+        "Includes Bram Hendriks (Domain Architect — Payments)",
+        "Includes Aisha Khan (Tribe Lead — Payments)",
+        "Includes Charlotte Dubois (Compliance) for PSD2",
+        "Bram Hendriks and/or Aisha Khan scored highest (8-10)",
+        "Every listed stakeholder has a relevancy score from 1 to 10",
+        "Every listed stakeholder has a written rationale naming the relevance axis",
+        "Stakeholders are ordered by relevancy score, highest first",
+        "No fabricated people outside the six synthetic-data entries"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "api-gateway-event-backbone",
+      "prompt": "Who do I need to talk to about standardising integration across domains — we're proposing a managed API gateway and a shared event backbone, and I want to retire a load of point-to-point batch interfaces.",
+      "expected_output": "Ahmed Benali (integration) as the clear top-scored lead; possibly Carlos and domain architects with stated reasons. Scores and rationale per person; only relevant people.",
+      "files": ["enterprise-architect/syntethic-data/"],
+      "assertions": [
+        "Includes Ahmed Benali (Integration Architect)",
+        "Ahmed Benali is the highest-scored stakeholder (8-10)",
+        "Every listed stakeholder has a relevancy score from 1 to 10",
+        "Every listed stakeholder has a written rationale naming the relevance axis",
+        "Stakeholders are ordered by relevancy score, highest first",
+        "No fabricated people outside the six synthetic-data entries",
+        "Only genuinely relevant people listed; off-topic people omitted or low-scored"
+      ]
+    }
+  ]
+}

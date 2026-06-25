@@ -1,0 +1,403 @@
+{
+  "metadata": {
+    "skill_name": "stakeholder-finder",
+    "skill_path": "<path/to/skill>",
+    "executor_model": "<model-name>",
+    "analyzer_model": "<model-name>",
+    "timestamp": "2026-06-25T08:47:24Z",
+    "evals_run": [
+      0,
+      1,
+      2
+    ],
+    "runs_per_configuration": 3
+  },
+  "runs": [
+    {
+      "eval_id": 0,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 8,
+        "failed": 0,
+        "total": 8,
+        "time_seconds": 68.3,
+        "tokens": 25123,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Includes Anika Sharma (Head of Data Architecture)",
+          "passed": true,
+          "evidence": "Listed at 9/10, remit+concern rationale."
+        },
+        {
+          "text": "Includes Carlos Mendes (Cloud Architect)",
+          "passed": true,
+          "evidence": "Listed at 8/10."
+        },
+        {
+          "text": "Includes Charlotte Dubois (Compliance) because customer financial data is in scope",
+          "passed": true,
+          "evidence": "Listed at 9/10 with explicit regulated-data rationale."
+        },
+        {
+          "text": "Every listed stakeholder has a relevancy score from 1 to 10",
+          "passed": true,
+          "evidence": "All six carry an N/10 score."
+        },
+        {
+          "text": "Every listed stakeholder has a written rationale naming the relevance axis",
+          "passed": true,
+          "evidence": "Each bolds Remit/Concern/Structural."
+        },
+        {
+          "text": "Stakeholders are ordered by relevancy score, highest first",
+          "passed": true,
+          "evidence": "9,9,8,6,5,4 descending."
+        },
+        {
+          "text": "No fabricated people outside the six synthetic-data entries",
+          "passed": true,
+          "evidence": "Mark van Dijk/Fatima/etc. appear only in the 'left out / gaps' note, not the ranked list."
+        },
+        {
+          "text": "Payments specialists not top-scored (8-10) without an explicit structural reason",
+          "passed": true,
+          "evidence": "Bram 5, Aisha 4 \u2014 correctly down-weighted."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 8,
+        "failed": 0,
+        "total": 8,
+        "time_seconds": 59.1,
+        "tokens": 23910,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Includes Bram Hendriks (Domain Architect \u2014 Payments)",
+          "passed": true,
+          "evidence": "Top of list at 10/10."
+        },
+        {
+          "text": "Includes Aisha Khan (Tribe Lead \u2014 Payments)",
+          "passed": true,
+          "evidence": "9/10."
+        },
+        {
+          "text": "Includes Charlotte Dubois (Compliance) for PSD2",
+          "passed": true,
+          "evidence": "8/10 with PSD2 sign-off rationale."
+        },
+        {
+          "text": "Bram Hendriks and/or Aisha Khan scored highest (8-10)",
+          "passed": true,
+          "evidence": "Bram 10, Aisha 9 lead the ranking."
+        },
+        {
+          "text": "Every listed stakeholder has a relevancy score from 1 to 10",
+          "passed": true,
+          "evidence": "All four carry N/10."
+        },
+        {
+          "text": "Every listed stakeholder has a written rationale naming the relevance axis",
+          "passed": true,
+          "evidence": "Each cites Remit/Concern/Structural."
+        },
+        {
+          "text": "Stakeholders are ordered by relevancy score, highest first",
+          "passed": true,
+          "evidence": "10,9,8,7 descending."
+        },
+        {
+          "text": "No fabricated people outside the six synthetic-data entries",
+          "passed": true,
+          "evidence": "Anika/Carlos in left-out; Mark van Dijk etc. only in gaps note."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.8571428571428571,
+        "passed": 6,
+        "failed": 1,
+        "total": 7,
+        "time_seconds": 276.3,
+        "tokens": 26999,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Includes Ahmed Benali (Integration Architect)",
+          "passed": true,
+          "evidence": "Top at 10/10, 'this proposal is his remit'."
+        },
+        {
+          "text": "Ahmed Benali is the highest-scored stakeholder (8-10)",
+          "passed": true,
+          "evidence": "10/10, ranked first."
+        },
+        {
+          "text": "Every listed stakeholder has a relevancy score from 1 to 10",
+          "passed": true,
+          "evidence": "All ranked entries carry N/10."
+        },
+        {
+          "text": "Every listed stakeholder has a written rationale naming the relevance axis",
+          "passed": true,
+          "evidence": "Each cites an axis."
+        },
+        {
+          "text": "Stakeholders are ordered by relevancy score, highest first",
+          "passed": true,
+          "evidence": "10,8,8,7,6,6 descending."
+        },
+        {
+          "text": "No fabricated people outside the six synthetic-data entries",
+          "passed": false,
+          "evidence": "Mark van Dijk is placed IN the ranked shortlist at 8/10 despite having no stakeholder entry (only a wiki-link). The other two evals correctly kept such people out of the ranking \u2014 inconsistent."
+        },
+        {
+          "text": "Only genuinely relevant people listed; off-topic people omitted or low-scored",
+          "passed": true,
+          "evidence": "Carlos deliberately omitted with a build-time-only rationale."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 0,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.75,
+        "passed": 6,
+        "failed": 2,
+        "total": 8,
+        "time_seconds": 54.8,
+        "tokens": 20174,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Includes Anika Sharma (Head of Data Architecture)",
+          "passed": true,
+          "evidence": "Listed as core decision-maker."
+        },
+        {
+          "text": "Includes Carlos Mendes (Cloud Architect)",
+          "passed": true,
+          "evidence": "Listed as core."
+        },
+        {
+          "text": "Includes Charlotte Dubois (Compliance) because customer financial data is in scope",
+          "passed": true,
+          "evidence": "Listed as essential with regulatory rationale."
+        },
+        {
+          "text": "Every listed stakeholder has a relevancy score from 1 to 10",
+          "passed": false,
+          "evidence": "No numeric scores; uses prose tiers ('talk to first', 'secondary')."
+        },
+        {
+          "text": "Every listed stakeholder has a written rationale naming the relevance axis",
+          "passed": true,
+          "evidence": "Each has a 'why' explanation."
+        },
+        {
+          "text": "Stakeholders are ordered by relevancy score, highest first",
+          "passed": false,
+          "evidence": "No scores to order by; grouped into prose tiers only."
+        },
+        {
+          "text": "No fabricated people outside the six synthetic-data entries",
+          "passed": true,
+          "evidence": "Referenced leaders flagged as having no profile; not invented attributes."
+        },
+        {
+          "text": "Payments specialists not top-scored (8-10) without an explicit structural reason",
+          "passed": true,
+          "evidence": "Aisha/Bram kept in 'worth noting', not elevated."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.5,
+        "passed": 4,
+        "failed": 4,
+        "total": 8,
+        "time_seconds": 57.7,
+        "tokens": 21089,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Includes Bram Hendriks (Domain Architect \u2014 Payments)",
+          "passed": true,
+          "evidence": "Tier 1, named most important."
+        },
+        {
+          "text": "Includes Aisha Khan (Tribe Lead \u2014 Payments)",
+          "passed": true,
+          "evidence": "Tier 1."
+        },
+        {
+          "text": "Includes Charlotte Dubois (Compliance) for PSD2",
+          "passed": true,
+          "evidence": "Tier 1."
+        },
+        {
+          "text": "Bram Hendriks and/or Aisha Khan scored highest (8-10)",
+          "passed": false,
+          "evidence": "No numeric scores; tier labels only."
+        },
+        {
+          "text": "Every listed stakeholder has a relevancy score from 1 to 10",
+          "passed": false,
+          "evidence": "No scores anywhere."
+        },
+        {
+          "text": "Every listed stakeholder has a written rationale naming the relevance axis",
+          "passed": true,
+          "evidence": "Each has a why."
+        },
+        {
+          "text": "Stakeholders are ordered by relevancy score, highest first",
+          "passed": false,
+          "evidence": "Grouped by prose tiers, not score."
+        },
+        {
+          "text": "No fabricated people outside the six synthetic-data entries",
+          "passed": false,
+          "evidence": "An 'Also pull in' section lists Maria Oliveira, Jonas Bakker, Hannah Schulz et al. as people to engage \u2014 surfacing unprofiled names as actionable stakeholders."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.42857142857142855,
+        "passed": 3,
+        "failed": 4,
+        "total": 7,
+        "time_seconds": 69.7,
+        "tokens": 21533,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Includes Ahmed Benali (Integration Architect)",
+          "passed": true,
+          "evidence": "Named the single most important contact."
+        },
+        {
+          "text": "Ahmed Benali is the highest-scored stakeholder (8-10)",
+          "passed": false,
+          "evidence": "No numeric scores; he's 'start here' but unscored."
+        },
+        {
+          "text": "Every listed stakeholder has a relevancy score from 1 to 10",
+          "passed": false,
+          "evidence": "No scores."
+        },
+        {
+          "text": "Every listed stakeholder has a written rationale naming the relevance axis",
+          "passed": true,
+          "evidence": "Each section explains why."
+        },
+        {
+          "text": "Stakeholders are ordered by relevancy score, highest first",
+          "passed": false,
+          "evidence": "Grouped by prose category, not score."
+        },
+        {
+          "text": "No fabricated people outside the six synthetic-data entries",
+          "passed": true,
+          "evidence": "Mark van Dijk / Miguel Santos flagged as inferred, no invented attributes."
+        },
+        {
+          "text": "Only genuinely relevant people listed; off-topic people omitted or low-scored",
+          "passed": false,
+          "evidence": "All six profiled people are listed and engaged; nothing filtered out or down-weighted."
+        }
+      ],
+      "notes": []
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 0.9524,
+        "stddev": 0.0825,
+        "min": 0.8571,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 134.5667,
+        "stddev": 122.8308,
+        "min": 59.1,
+        "max": 276.3
+      },
+      "tokens": {
+        "mean": 25344.0,
+        "stddev": 1556.3133,
+        "min": 23910,
+        "max": 26999
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 0.5595,
+        "stddev": 0.1688,
+        "min": 0.4286,
+        "max": 0.75
+      },
+      "time_seconds": {
+        "mean": 60.7333,
+        "stddev": 7.8996,
+        "min": 54.8,
+        "max": 69.7
+      },
+      "tokens": {
+        "mean": 20932.0,
+        "stddev": 692.9697,
+        "min": 20174,
+        "max": 21533
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.39",
+      "time_seconds": "+73.8",
+      "tokens": "+4412"
+    }
+  },
+  "notes": []
+}

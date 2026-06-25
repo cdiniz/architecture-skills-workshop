@@ -1,0 +1,15 @@
+{
+  "eval_id": 0,
+  "eval_name": "cloud-data-migration",
+  "prompt": "I'm scoping a migration of our analytics data platform off on-prem into the cloud (AWS to Azure for the data warehouse). Some of it is customer financial data. Who should I be talking to before we commit to this?",
+  "assertions": [
+    {"text": "Includes Anika Sharma (Head of Data Architecture) as a relevant stakeholder", "rationale": "Data platform migration is squarely her remit."},
+    {"text": "Includes Carlos Mendes (Cloud Architect)", "rationale": "Cloud landing zones / AWS-Azure target is his remit."},
+    {"text": "Includes Charlotte Dubois (Compliance) because customer financial data is in scope", "rationale": "Regulated/customer data triggers the compliance concern axis."},
+    {"text": "Every listed stakeholder has a relevancy score from 1 to 10", "rationale": "Core output requirement."},
+    {"text": "Every listed stakeholder has a written rationale naming why they are relevant (remit/concern/structural)", "rationale": "Relevance must have a reason."},
+    {"text": "Stakeholders are ordered by relevancy score, highest first", "rationale": "Specified output ordering."},
+    {"text": "Does not list any person who is not one of the six entries in the synthetic-data folder (no fabricated people)", "rationale": "No hallucinated stakeholders."},
+    {"text": "Payments-specialist people (e.g. Aisha Khan, Bram Hendriks) are NOT given a top score (8-10) unless an explicit structural reason is stated", "rationale": "Precision: don't pad with off-topic people."}
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "expectations": [
+    {
+      "text": "Includes Anika Sharma (Head of Data Architecture)",
+      "passed": true,
+      "evidence": "Listed as core decision-maker."
+    },
+    {
+      "text": "Includes Carlos Mendes (Cloud Architect)",
+      "passed": true,
+      "evidence": "Listed as core."
+    },
+    {
+      "text": "Includes Charlotte Dubois (Compliance) because customer financial data is in scope",
+      "passed": true,
+      "evidence": "Listed as essential with regulatory rationale."
+    },
+    {
+      "text": "Every listed stakeholder has a relevancy score from 1 to 10",
+      "passed": false,
+      "evidence": "No numeric scores; uses prose tiers ('talk to first', 'secondary')."
+    },
+    {
+      "text": "Every listed stakeholder has a written rationale naming the relevance axis",
+      "passed": true,
+      "evidence": "Each has a 'why' explanation."
+    },
+    {
+      "text": "Stakeholders are ordered by relevancy score, highest first",
+      "passed": false,
+      "evidence": "No scores to order by; grouped into prose tiers only."
+    },
+    {
+      "text": "No fabricated people outside the six synthetic-data entries",
+      "passed": true,
+      "evidence": "Referenced leaders flagged as having no profile; not invented attributes."
+    },
+    {
+      "text": "Payments specialists not top-scored (8-10) without an explicit structural reason",
+      "passed": true,
+      "evidence": "Aisha/Bram kept in 'worth noting', not elevated."
+    }
+  ],
+  "summary": {
+    "pass_rate": 0.75,
+    "passed": 6,
+    "failed": 2,
+    "total": 8
+  }
+}
