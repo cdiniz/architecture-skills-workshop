@@ -190,22 +190,22 @@ approach first, not a measurement — so make the *rationale* carry the weight.
 
 ## Output format
 
-Lead with a one-line read of the issue **and the meeting type you're sizing the room
-for** (including any assumptions you made), then list the relevant stakeholders
-**ordered by score, highest first**. For each:
+Lead with a one-line read of the issue **and the meeting type (and room-breadth mode,
+where it applies) you're sizing the room for** — including any assumptions you made.
+Then present the relevant stakeholders as a **table, ordered by score, highest first**:
 
 ```markdown
-### <Name> — <Role> · relevance <N>/10
-<1–3 sentences: why they're relevant, naming which axis drives it — remit
-(they own/sign off), concern (it touches their stated lens), or structural
-(programme / dotted-line / reporting chain). If the meeting type moved their score
-(altitude too senior/junior for this room), say so. If a specific concern or remit
-line from their entry applies, cite it. Optionally end with what to ask them or
-align on.>
+| Stakeholder | Role | Why relevant | Score |
+|-------------|------|--------------|-------|
+| <Full name> | <Role from their entry> | <1–2 sentences: which axis drives it — remit (they own/sign off), concern (their stated lens), or structural (programme / dotted-line / reporting chain); cite a specific remit or concern line where it applies; say so if the meeting type moved their score (too senior/junior for this room). End with what to ask or align on if useful.> | <N>/10 |
 ```
 
-Then close with up to three short boundary notes, so the shortlist's edges are legible
-and the user can catch a miss:
+Use the person's **full name** and the role exactly as their entry states it. Keep
+each rationale tight enough to read in a table cell but specific enough that the
+*reason* is clear — a row with a vague rationale is the failure mode to avoid.
+
+Then close with up to three short boundary notes below the table, so the shortlist's
+edges are legible and the user can catch a miss:
 
 - **Deliberately left out** — profiled people you considered but didn't rank, and why
   (e.g. "Cloud Architect — relevant at build time, not for this decision"; or "too
