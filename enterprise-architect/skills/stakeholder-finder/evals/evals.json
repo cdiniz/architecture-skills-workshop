@@ -51,6 +51,53 @@
         "No fabricated people outside the six synthetic-data entries",
         "Only genuinely relevant people listed; off-topic people omitted or low-scored"
       ]
+    },
+    {
+      "id": 4,
+      "name": "design-payments-working-session",
+      "prompt": "We're running a hands-on technical design session to work out the instant-payments processing flow and how it integrates with our systems. Who should be in the room?",
+      "expected_output": "Design/working altitude: makers up (Ahmed, Bram, Aisha as delivery voice); 'Head of' roles (Carlos, Anika) pushed down as too senior; unprofiled hands-on builders flagged as missing. Mode/altitude stated.",
+      "files": ["enterprise-architect/syntethic-data/"],
+      "assertions": [
+        "States the meeting type / altitude it sized the room for (design / working / maker level)",
+        "Surfaces Ahmed Benali and Bram Hendriks as hands-on design participants",
+        "Aisha Khan included at a working-relevant score, not dropped for being junior",
+        "Does not elevate anyone to the top purely on seniority; a 'Head of' is only high if core",
+        "Flags that the actual hands-on builders (unprofiled reports) are missing from the wiki",
+        "Scores 1-10 with rationale, ordered; no fabricated people in the ranked list"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "strategy-payments-investment-case (toggle: INCLUSIVE expected)",
+      "prompt": "We're holding a steering session to set the multi-year strategy and the investment case for modernising our payments platform. Who should be in the room?",
+      "expected_output": "Strategic altitude, INCLUSIVE room-breadth mode (the 'investment case' framing keeps a delivery-feasibility voice). Bram top; Aisha kept below him as the feasibility voice; engineer level represented-by; unprofiled senior chain in gap note. Mode stated.",
+      "files": ["enterprise-architect/syntethic-data/"],
+      "assertions": [
+        "States the meeting type AND which room-breadth mode it used (tight vs inclusive)",
+        "Selects INCLUSIVE mode and justifies it from the investment-case framing",
+        "Surfaces Bram Hendriks as the senior payments-architecture voice",
+        "Keeps Aisha Khan as a delivery-feasibility voice ranked below Bram (not collapsed)",
+        "Collapses the engineer level to a 'represented by' note",
+        "Flags the unprofiled senior chain (Mark van Dijk / Jeroen Meijer / Miguel Santos) in the gap note",
+        "Scores 1-10 with rationale, ordered; no fabricated people in the ranked list"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "strategy-payments-direction-only (toggle: TIGHT expected)",
+      "prompt": "We're convening a leadership steering session to set the multi-year direction and priorities for payments — purely the strategic direction and mandate, not a delivery or costing exercise. Who should be in the room?",
+      "expected_output": "Strategic altitude, TIGHT (leadership-only) room-breadth mode (no deliverability signal). Bram is the single payments-line voice; Aisha collapsed to represented-by; unprofiled senior chain in gap note as the likely chair/sign-off. Mode stated.",
+      "files": ["enterprise-architect/syntethic-data/"],
+      "assertions": [
+        "States the meeting type AND which room-breadth mode it used (tight vs inclusive)",
+        "Selects TIGHT mode and justifies it from the direction-only framing",
+        "Surfaces Bram Hendriks as the single payments-line voice in the ranked list",
+        "Aisha Khan collapsed to a 'represented by Bram' note, not ranked at top altitude",
+        "Ranked list has one voice per payments stream (no domain-architect + tribe-lead stacking)",
+        "Flags the unprofiled senior chain in the gap note as the likely chair/sign-off",
+        "Scores 1-10 with rationale, ordered; no fabricated people in the ranked list"
+      ]
     }
   ]
 }

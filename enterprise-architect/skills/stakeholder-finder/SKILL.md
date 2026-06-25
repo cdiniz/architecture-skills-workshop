@@ -38,7 +38,7 @@ sure you have the full set before you start reasoning.
 
 ## Workflow
 
-### 1. Understand the issue, then ask a few check questions
+### 1. Understand the issue and the meeting, then ask a few check questions
 
 Restate the issue in your own words so the user can correct you, then ask a **small**
 number (usually 2–3) of short clarifying questions — and make them *grounded in what
@@ -48,6 +48,19 @@ very different people depending on details the user hasn't said yet: is regulate
 customer data in scope (pulls in compliance and data architecture), is it a one-off
 or part of a standing transformation programme (pulls in the programme's people),
 which domain's systems are moving (pulls in that domain's architect and tribe lead)?
+
+**The single most important thing to establish is what kind of meeting this is**,
+because it sets the *altitude* of everyone you should surface (see step 3). The same
+topic needs a different room depending on whether it's a:
+
+- **Design / working session** — making the technical decision and doing the work.
+- **Tactical session** — planning, sequencing, committing teams, coordinating delivery.
+- **Strategic / steering session** — setting direction, mandate, investment, sign-off.
+
+If the user's wording already tells you ("technical design session", "set our
+payments strategy", "plan next quarter"), infer it and say so. If it's genuinely
+ambiguous, make the meeting type one of your check questions — it changes the answer
+more than almost anything else.
 
 Keep it light. If the user has already given enough to discriminate, or says "just
 give me your best guess", skip ahead and surface your assumptions in the output
@@ -72,6 +85,13 @@ non-obvious but important people. For each person, ask three separate questions:
   someone clearly central? This is the axis people forget, and it's often where the
   person who can unblock or escalate sits.
 
+As you read each entry, also note two things you'll need in step 3: the person's
+**altitude** (are they hands-on, a discipline lead, or a senior leader?) and which
+**stream** they sit in (their reporting/functional chain around a domain or
+discipline). Both come from the Relationships section plus the role title — "Head
+of", "Chief", "Director" and being the *functional leader* of several people signal
+seniority; having no reports and a maker-style title signals hands-on.
+
 Most genuinely relevant people light up on more than one axis; that overlap is a
 strong signal. Follow the `[[wiki-links]]` in the Relationships section when an
 entry points you toward someone you'd otherwise have skipped.
@@ -84,7 +104,67 @@ concerns. Keep them clearly separate from the people you can actually assess: a
 linked name with no entry is a lead to follow up, not a stakeholder you can score.
 See the next step for exactly where they go.
 
-### 3. Score, filter, and explain
+### 3. Calibrate to the meeting: altitude and one voice per stream
+
+A relevant person can still be the *wrong* person for this particular meeting. Two
+adjustments turn a relevance list into the right room:
+
+**Match altitude to the meeting type.** Bias the roster toward the level the meeting
+operates at — relevance gets you onto the longlist, but altitude decides who actually
+belongs:
+
+- **Design / working session** → the people who'll make and live with the technical
+  decision: domain/integration/cloud/data architects, engineers, delivery leads. A
+  "Head of" or functional leader is usually *too senior* here — include one only if
+  the design genuinely hinges on their expertise or sign-off. Inviting leadership to a
+  working session slows it down without adding signal.
+- **Tactical session** → the layer that turns direction into a plan and commits teams:
+  domain architects, the head of a single discipline, tribe leads. Not every engineer,
+  not the top strategy owner.
+- **Strategic / steering session** → the senior leaders who set direction, hold the
+  budget, and sign off: "Head of", "Chief", "Director", functional leaders, the
+  escalation chain. Working-level specialists are usually *represented by their leader*
+  rather than in the room — surface the leader, not the whole team.
+
+So the same person can be a 9 for a design session and a 3 for a strategy session, or
+vice versa. Let the meeting type move the scores, and say it did.
+
+**One voice per stream.** Don't invite two adjacent levels of the *same reporting or
+functional chain* — a lead architect and an architect under them, or a head and a
+tribe lead in the same line. The Relationships section is how you spot it: if one
+person sits in another's management/functional chain (directly or transitively) and
+they'd speak to the *same* concern, they're one stream. Pick the single person at the
+altitude the meeting calls for, and note whom they stand in for, rather than stacking
+the chain. A senior in a strategy session already represents the team below; the
+hands-on person in a design session is the one who matters, not their boss.
+
+Be careful not to over-collapse: people in the same domain with **genuinely different
+remits** (architecture vs delivery vs compliance) are *different* streams of concern
+and may both belong — collapse only when one truly substitutes for the other on this
+issue. When you drop someone for this reason, move them to a "represented by …" note
+rather than deleting them silently, so the user can overrule you.
+
+**The room-breadth toggle.** There's one case where reasonable people disagree: a
+*same-line, different-remit* second voice — most often a tribe/delivery lead sitting
+under the domain architect, in a strategy or steering room. Two defensible rooms:
+
+- **Tight (leadership-only):** the single most senior person in the line represents
+  everyone below them, *including* the different-remit reports. The domain architect
+  carries the delivery line's view into the room; the tribe lead is "represented by".
+  Right when the session is purely about direction, mandate, and money.
+- **Inclusive (feasibility-aware):** keep the different-remit second voice in the room
+  (ranked by altitude fit) because they bring something the leader can't fully stand
+  in for — e.g. "can we actually build this, and what will it cost". Right when the
+  session weighs deliverability or an investment case, not just direction.
+
+Infer the default from the framing — a bare "set the strategy / steering session"
+leans **tight**; any signal of "can we deliver this / what's the cost / investment
+case" leans **inclusive**. If it's genuinely unclear and the choice changes the room,
+make it one of your check questions ("tight leadership room, or should I keep a
+delivery-feasibility voice?"). Either way, **state which mode you used** and keep the
+collapsed person in the "represented by" note, so switching modes is a one-line ask.
+
+### 4. Score, filter, and explain
 
 Score and rank **only people who have a real stakeholder entry** — those are the
 only ones whose remit and concerns you've actually read. A person known only from a
@@ -110,27 +190,36 @@ approach first, not a measurement — so make the *rationale* carry the weight.
 
 ## Output format
 
-Lead with a one-line read of the issue (including any assumptions you made), then list
-the relevant stakeholders **ordered by score, highest first**. For each:
+Lead with a one-line read of the issue **and the meeting type you're sizing the room
+for** (including any assumptions you made), then list the relevant stakeholders
+**ordered by score, highest first**. For each:
 
 ```markdown
 ### <Name> — <Role> · relevance <N>/10
 <1–3 sentences: why they're relevant, naming which axis drives it — remit
 (they own/sign off), concern (it touches their stated lens), or structural
-(programme / dotted-line / reporting chain). If a specific concern or remit line
-from their entry applies, cite it. Optionally end with what to ask them or align on.>
+(programme / dotted-line / reporting chain). If the meeting type moved their score
+(altitude too senior/junior for this room), say so. If a specific concern or remit
+line from their entry applies, cite it. Optionally end with what to ask them or
+align on.>
 ```
 
-Then close with two short boundary notes, so the shortlist's edges are legible and
-the user can catch a miss:
+Then close with up to three short boundary notes, so the shortlist's edges are legible
+and the user can catch a miss:
 
 - **Deliberately left out** — profiled people you considered but didn't rank, and why
-  (e.g. "Cloud Architect — relevant at build time, not for this decision").
+  (e.g. "Cloud Architect — relevant at build time, not for this decision"; or "too
+  senior for a design session").
+- **Represented by their stream** — where you collapsed a reporting chain to one
+  voice, name who you dropped and who stands in for them (e.g. "Tribe Lead omitted —
+  the Domain Architect represents the payments line for a strategy session"). This
+  makes the one-voice-per-stream call reversible.
 - **Referenced but not in the wiki** — important-looking people who appear only as
   `[[wiki-links]]` with no entry (managers, functional leaders, programme sponsors).
   Name them and say why they'd matter, but **do not score them** — flag that their
   entry is missing and that adding it would let you place them properly. This is
-  where the escalation/sign-off chain usually surfaces.
+  where the escalation/sign-off chain usually surfaces (and it's often exactly the
+  altitude a strategy session needs).
 
 If your check questions went unanswered, state the assumptions the shortlist rests on
 so the user can redirect you.
@@ -142,6 +231,9 @@ so the user can redirect you.
 - **Prefer precision over coverage.** A tight, well-justified shortlist is more useful
   than an exhaustive one; the cost of a bloated list is that the people who matter get
   lost in it.
+- **Right altitude, one voice per stream.** Let the meeting type set the level
+  (design → makers, strategy → leaders) and don't stack two levels of the same
+  reporting chain — pick the person who fits the room and note whom they represent.
 - **Don't fabricate people or attributes.** Only *rank* stakeholders that have an
   entry, and only cite remit/concerns/relationships that their entry actually states.
   People known only from `[[wiki-links]]` go in the "referenced but not in the wiki"

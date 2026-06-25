@@ -1,0 +1,45 @@
+{
+  "expectations": [
+    {
+      "text": "States the meeting type / altitude it sized the room for (strategic / steering / leadership level)",
+      "passed": false,
+      "evidence": "No altitude sizing."
+    },
+    {
+      "text": "Surfaces Bram Hendriks (Domain Architect, Payments) as the senior payments-architecture voice",
+      "passed": true,
+      "evidence": "Listed."
+    },
+    {
+      "text": "Aisha Khan (Tribe Lead \u2014 working-level delivery) is NOT placed at top altitude: she is omitted, low-scored, or explicitly noted as represented by the payments stream lead",
+      "passed": false,
+      "evidence": "Listed as core, no altitude treatment."
+    },
+    {
+      "text": "Does not stack two adjacent levels of the same payments reporting/functional chain in the ranked list (one voice per stream)",
+      "passed": false,
+      "evidence": "Stacks Bram + Aisha + everyone."
+    },
+    {
+      "text": "Flags the unprofiled senior/escalation chain (e.g. Mark van Dijk / Jeroen Meijer / Miguel Santos) as exactly the leadership a strategy session needs, in the gap note",
+      "passed": true,
+      "evidence": "Flagged sponsors to confirm as budget/decision owners."
+    },
+    {
+      "text": "Every ranked stakeholder has a 1-10 score and a rationale, ordered highest first",
+      "passed": false,
+      "evidence": "No scores."
+    },
+    {
+      "text": "No fabricated people in the ranked list (unprofiled wiki-link people only in the gap note)",
+      "passed": true,
+      "evidence": "Sponsors flagged separately."
+    }
+  ],
+  "summary": {
+    "pass_rate": 0.42857142857142855,
+    "passed": 3,
+    "failed": 4,
+    "total": 7
+  }
+}

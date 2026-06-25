@@ -1,0 +1,276 @@
+{
+  "metadata": {
+    "skill_name": "stakeholder-finder",
+    "skill_path": "<path/to/skill>",
+    "executor_model": "<model-name>",
+    "analyzer_model": "<model-name>",
+    "timestamp": "2026-06-25T09:34:03Z",
+    "evals_run": [
+      3,
+      5
+    ],
+    "runs_per_configuration": 3
+  },
+  "runs": [
+    {
+      "eval_id": 3,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 7,
+        "failed": 0,
+        "total": 7,
+        "time_seconds": 80.3,
+        "tokens": 28270,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "States the meeting type AND which room-breadth mode it used (tight vs inclusive)",
+          "passed": true,
+          "evidence": "States strategic/steering + inclusive mode."
+        },
+        {
+          "text": "Selects INCLUSIVE mode and justifies it from the 'investment case' / deliverability framing",
+          "passed": true,
+          "evidence": "Explicitly kept a feasibility voice because of investment-case framing; noted one-line switch to tight."
+        },
+        {
+          "text": "Surfaces Bram Hendriks as the senior payments-architecture voice (top of the line)",
+          "passed": true,
+          "evidence": "Bram 9, top."
+        },
+        {
+          "text": "Keeps Aisha Khan as a delivery-feasibility voice, ranked below Bram, NOT collapsed (correct under inclusive mode)",
+          "passed": true,
+          "evidence": "Aisha 7, delivery/cost feasibility."
+        },
+        {
+          "text": "Collapses the engineer level (e.g. Maria Oliveira / Jonas Bakker) to a 'represented by' note",
+          "passed": true,
+          "evidence": "Collapsed tribe members into their leads."
+        },
+        {
+          "text": "Flags the unprofiled senior/escalation chain (Mark van Dijk / Jeroen Meijer / Miguel Santos) in the gap note",
+          "passed": true,
+          "evidence": "Sponsors unscored wiki-links; Mark/Jeroen called out."
+        },
+        {
+          "text": "Every ranked stakeholder has a 1-10 score and rationale, ordered; no fabricated people in the ranked list",
+          "passed": true,
+          "evidence": "9,7,6,6,6; chain unscored."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 5,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 7,
+        "failed": 0,
+        "total": 7,
+        "time_seconds": 65.3,
+        "tokens": 26725,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "States the meeting type AND which room-breadth mode it used (tight vs inclusive)",
+          "passed": true,
+          "evidence": "States strategic/steering + 'tight (leadership-only)'."
+        },
+        {
+          "text": "Selects TIGHT (leadership-only) mode and justifies it from the direction-only / no-deliverability framing",
+          "passed": true,
+          "evidence": "Cited 'not a delivery or costing exercise' as making tight the default."
+        },
+        {
+          "text": "Surfaces Bram Hendriks as the single payments-line voice in the ranked list",
+          "passed": true,
+          "evidence": "Bram 8, represents the payments line."
+        },
+        {
+          "text": "Aisha Khan (Tribe Lead) is collapsed to a 'represented by Bram' note, NOT ranked at top altitude",
+          "passed": true,
+          "evidence": "Aisha omitted from tight room, 'Bram represents the payments line'."
+        },
+        {
+          "text": "Ranked list has one voice per payments stream (no domain-architect + tribe-lead stacking)",
+          "passed": true,
+          "evidence": "Only Bram from payments line in ranking."
+        },
+        {
+          "text": "Flags the unprofiled senior/escalation chain (Mark van Dijk / Jeroen Meijer / Miguel Santos) in the gap note as the likely chair/sign-off",
+          "passed": true,
+          "evidence": "All three in gap note as budget/mandate holders."
+        },
+        {
+          "text": "Every ranked stakeholder has a 1-10 score and rationale, ordered; no fabricated people in the ranked list",
+          "passed": true,
+          "evidence": "Bram 8, Charlotte 6, Ahmed 5; chain unscored."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.2857142857142857,
+        "passed": 2,
+        "failed": 5,
+        "total": 7,
+        "time_seconds": 44.8,
+        "tokens": 19945,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "States the meeting type AND which room-breadth mode it used (tight vs inclusive)",
+          "passed": false,
+          "evidence": "No mode concept."
+        },
+        {
+          "text": "Selects INCLUSIVE mode and justifies it from the 'investment case' / deliverability framing",
+          "passed": false,
+          "evidence": "No mode reasoning."
+        },
+        {
+          "text": "Surfaces Bram Hendriks as the senior payments-architecture voice (top of the line)",
+          "passed": true,
+          "evidence": "Listed as core."
+        },
+        {
+          "text": "Keeps Aisha Khan as a delivery-feasibility voice, ranked below Bram, NOT collapsed (correct under inclusive mode)",
+          "passed": false,
+          "evidence": "Listed flat, no ranking/feasibility framing."
+        },
+        {
+          "text": "Collapses the engineer level (e.g. Maria Oliveira / Jonas Bakker) to a 'represented by' note",
+          "passed": false,
+          "evidence": "No collapse."
+        },
+        {
+          "text": "Flags the unprofiled senior/escalation chain (Mark van Dijk / Jeroen Meijer / Miguel Santos) in the gap note",
+          "passed": true,
+          "evidence": "Sponsors flagged."
+        },
+        {
+          "text": "Every ranked stakeholder has a 1-10 score and rationale, ordered; no fabricated people in the ranked list",
+          "passed": false,
+          "evidence": "No scores."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 5,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.0,
+        "passed": 0,
+        "failed": 7,
+        "total": 7,
+        "time_seconds": 48.0,
+        "tokens": 19834,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "States the meeting type AND which room-breadth mode it used (tight vs inclusive)",
+          "passed": false,
+          "evidence": "No mode."
+        },
+        {
+          "text": "Selects TIGHT (leadership-only) mode and justifies it from the direction-only / no-deliverability framing",
+          "passed": false,
+          "evidence": "No mode reasoning."
+        },
+        {
+          "text": "Surfaces Bram Hendriks as the single payments-line voice in the ranked list",
+          "passed": false,
+          "evidence": "Stacks Aisha + Bram."
+        },
+        {
+          "text": "Aisha Khan (Tribe Lead) is collapsed to a 'represented by Bram' note, NOT ranked at top altitude",
+          "passed": false,
+          "evidence": "Aisha in core room."
+        },
+        {
+          "text": "Ranked list has one voice per payments stream (no domain-architect + tribe-lead stacking)",
+          "passed": false,
+          "evidence": "Stacked."
+        },
+        {
+          "text": "Flags the unprofiled senior/escalation chain (Mark van Dijk / Jeroen Meijer / Miguel Santos) in the gap note as the likely chair/sign-off",
+          "passed": false,
+          "evidence": "Put Mark van Dijk/Jeroen IN the core room, not a gap note."
+        },
+        {
+          "text": "Every ranked stakeholder has a 1-10 score and rationale, ordered; no fabricated people in the ranked list",
+          "passed": false,
+          "evidence": "No scores; unprofiled people in the room."
+        }
+      ],
+      "notes": []
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 1.0,
+        "stddev": 0.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 72.8,
+        "stddev": 10.6066,
+        "min": 65.3,
+        "max": 80.3
+      },
+      "tokens": {
+        "mean": 27497.5,
+        "stddev": 1092.48,
+        "min": 26725,
+        "max": 28270
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 0.1429,
+        "stddev": 0.202,
+        "min": 0.0,
+        "max": 0.2857
+      },
+      "time_seconds": {
+        "mean": 46.4,
+        "stddev": 2.2627,
+        "min": 44.8,
+        "max": 48.0
+      },
+      "tokens": {
+        "mean": 19889.5,
+        "stddev": 78.4889,
+        "min": 19834,
+        "max": 19945
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.86",
+      "time_seconds": "+26.4",
+      "tokens": "+7608"
+    }
+  },
+  "notes": []
+}

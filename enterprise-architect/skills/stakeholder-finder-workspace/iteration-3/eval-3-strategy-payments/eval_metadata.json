@@ -1,0 +1,14 @@
+{
+  "eval_id": 3,
+  "eval_name": "strategy-payments-steering",
+  "prompt": "We're holding a steering session to set the multi-year strategy and the investment case for modernising our payments platform. Who should be in the room?",
+  "assertions": [
+    {"text": "States the meeting type / altitude it sized the room for (strategic / steering / leadership level)", "rationale": "New requirement: meeting type drives altitude."},
+    {"text": "Surfaces Bram Hendriks (Domain Architect, Payments) as the senior payments-architecture voice", "rationale": "He is the most senior profiled payments-architecture person and a sign-off voice."},
+    {"text": "Aisha Khan (Tribe Lead — working-level delivery) is NOT placed at top altitude: she is omitted, low-scored, or explicitly noted as represented by the payments stream lead", "rationale": "Altitude: a working-level delivery lead is usually represented by her leader in a strategy session."},
+    {"text": "Does not stack two adjacent levels of the same payments reporting/functional chain in the ranked list (one voice per stream)", "rationale": "New requirement: one voice per stream."},
+    {"text": "Flags the unprofiled senior/escalation chain (e.g. Mark van Dijk / Jeroen Meijer / Miguel Santos) as exactly the leadership a strategy session needs, in the gap note", "rationale": "Strategy altitude lives in the unprofiled leadership chain here."},
+    {"text": "Every ranked stakeholder has a 1-10 score and a rationale, ordered highest first", "rationale": "Core output requirement."},
+    {"text": "No fabricated people in the ranked list (unprofiled wiki-link people only in the gap note)", "rationale": "Carried-over requirement."}
+  ]
+}

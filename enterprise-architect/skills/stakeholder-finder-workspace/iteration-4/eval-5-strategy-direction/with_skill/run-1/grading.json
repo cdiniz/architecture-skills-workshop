@@ -1,0 +1,45 @@
+{
+  "expectations": [
+    {
+      "text": "States the meeting type AND which room-breadth mode it used (tight vs inclusive)",
+      "passed": true,
+      "evidence": "States strategic/steering + 'tight (leadership-only)'."
+    },
+    {
+      "text": "Selects TIGHT (leadership-only) mode and justifies it from the direction-only / no-deliverability framing",
+      "passed": true,
+      "evidence": "Cited 'not a delivery or costing exercise' as making tight the default."
+    },
+    {
+      "text": "Surfaces Bram Hendriks as the single payments-line voice in the ranked list",
+      "passed": true,
+      "evidence": "Bram 8, represents the payments line."
+    },
+    {
+      "text": "Aisha Khan (Tribe Lead) is collapsed to a 'represented by Bram' note, NOT ranked at top altitude",
+      "passed": true,
+      "evidence": "Aisha omitted from tight room, 'Bram represents the payments line'."
+    },
+    {
+      "text": "Ranked list has one voice per payments stream (no domain-architect + tribe-lead stacking)",
+      "passed": true,
+      "evidence": "Only Bram from payments line in ranking."
+    },
+    {
+      "text": "Flags the unprofiled senior/escalation chain (Mark van Dijk / Jeroen Meijer / Miguel Santos) in the gap note as the likely chair/sign-off",
+      "passed": true,
+      "evidence": "All three in gap note as budget/mandate holders."
+    },
+    {
+      "text": "Every ranked stakeholder has a 1-10 score and rationale, ordered; no fabricated people in the ranked list",
+      "passed": true,
+      "evidence": "Bram 8, Charlotte 6, Ahmed 5; chain unscored."
+    }
+  ],
+  "summary": {
+    "pass_rate": 1.0,
+    "passed": 7,
+    "failed": 0,
+    "total": 7
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "eval_id": 4,
+  "eval_name": "design-payments-working-session",
+  "prompt": "We're running a hands-on technical design session to work out the instant-payments processing flow and how it integrates with our systems. Who should be in the room?",
+  "assertions": [
+    {"text": "States the meeting type / altitude it sized the room for (design / working / maker level)", "rationale": "New requirement: meeting type drives altitude."},
+    {"text": "Surfaces Ahmed Benali (Integration Architect) and Bram Hendriks (Domain Architect, Payments) as hands-on design participants", "rationale": "The makers/pattern-owners for an instant-payments integration design."},
+    {"text": "Aisha Khan (Tribe Lead, Payments) is included at a working-relevant score, NOT dropped for being too junior", "rationale": "A design session wants the delivery/maker level; this is the inverse of the strategy case."},
+    {"text": "Does not elevate a person to the top purely on seniority; a 'Head of' is only high if their discipline is core to this design", "rationale": "Altitude: leaders are usually too senior for a working session."},
+    {"text": "Flags that the actual hands-on builders (unprofiled reports such as Maria Oliveira / Jonas Bakker) are missing from the wiki", "rationale": "A design session needs makers; the makers aren't profiled here."},
+    {"text": "Every ranked stakeholder has a 1-10 score and a rationale, ordered highest first", "rationale": "Core output requirement."},
+    {"text": "No fabricated people in the ranked list (unprofiled wiki-link people only in the gap note)", "rationale": "Carried-over requirement."}
+  ]
+}

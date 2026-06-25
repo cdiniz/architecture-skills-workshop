@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eval Review</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Lora:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js" integrity="sha384-EnyY0/GSHQGSxSgMwaIPzSESbqoOLSexfnSMN2AP+39Ckmn92stwABZynq1JyzdT" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --bg: #faf9f5;
+      --surface: #ffffff;
+      --border: #e8e6dc;
+      --text: #141413;
+      --text-muted: #b0aea5;
+      --accent: #d97757;
+      --accent-hover: #c4613f;
+      --green: #788c5d;
+      --green-bg: #eef2e8;
+      --red: #c44;
+      --red-bg: #fceaea;
+      --header-bg: #141413;
+      --header-text: #faf9f5;
+      --radius: 6px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Lora', Georgia, serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ---- Header ---- */
+    .header {
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .header h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    .header .instructions {
+      font-size: 0.8rem;
+      opacity: 0.7;
+      margin-top: 0.25rem;
+    }
+    .header .progress {
+      font-size: 0.875rem;
+      opacity: 0.8;
+      text-align: right;
+    }
+
+    /* ---- Main content ---- */
+    .main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    /* ---- Sections ---- */
+    .section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      flex-shrink: 0;
+    }
+    .section-header {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.75rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+    }
+    .section-body {
+      padding: 1rem;
+    }
+
+    /* ---- Config badge ---- */
+    .config-badge {
+      display: inline-block;
+      padding: 0.2rem 0.625rem;
+      border-radius: 9999px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-left: 0.75rem;
+      vertical-align: middle;
+    }
+    .config-badge.config-primary {
+      background: rgba(33, 150, 243, 0.12);
+      color: #1976d2;
+    }
+    .config-badge.config-baseline {
+      background: rgba(255, 193, 7, 0.15);
+      color: #f57f17;
+    }
+
+    /* ---- Prompt ---- */
+    .prompt-text {
+      white-space: pre-wrap;
+      font-size: 0.9375rem;
+      line-height: 1.6;
+    }
+
+    /* ---- Outputs ---- */
+    .output-file {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .output-file + .output-file {
+      margin-top: 1rem;
+    }
+    .output-file-header {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      font-family: 'SF Mono', SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .output-file-header .dl-btn {
+      font-size: 0.7rem;
+      color: var(--accent);
+      text-decoration: none;
+      cursor: pointer;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-weight: 500;
+      opacity: 0.8;
+    }
+    .output-file-header .dl-btn:hover {
+      opacity: 1;
+      text-decoration: underline;
+    }
+    .output-file-content {
+      padding: 0.75rem;
+      overflow-x: auto;
+    }
+    .output-file-content pre {
+      font-size: 0.8125rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: 'SF Mono', SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+    }
+    .output-file-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+    .output-file-content iframe {
+      width: 100%;
+      height: 600px;
+      border: none;
+    }
+    .output-file-content table {
+      border-collapse: collapse;
+      font-size: 0.8125rem;
+      width: 100%;
+    }
+    .output-file-content table td,
+    .output-file-content table th {
+      border: 1px solid var(--border);
+      padding: 0.375rem 0.5rem;
+      text-align: left;
+    }
+    .output-file-content table th {
+      background: var(--bg);
+      font-weight: 600;
+    }
+    .output-file-content .download-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.875rem;
+      cursor: pointer;
+    }
+    .output-file-content .download-link:hover {
+      background: var(--border);
+    }
+    .empty-state {
+      color: var(--text-muted);
+      font-style: italic;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    /* ---- Feedback ---- */
+    .prev-feedback {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.625rem 0.75rem;
+      margin-top: 0.75rem;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .prev-feedback-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.25rem;
+      color: var(--text-muted);
+    }
+    .feedback-textarea {
+      width: 100%;
+      min-height: 100px;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 0.9375rem;
+      line-height: 1.5;
+      resize: vertical;
+      color: var(--text);
+    }
+    .feedback-textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+    .feedback-status {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+      min-height: 1.1em;
+    }
+
+    /* ---- Grades (collapsible) ---- */
+    .grades-toggle {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+    }
+    .grades-toggle:hover {
+      color: var(--accent);
+    }
+    .grades-toggle .arrow {
+      margin-right: 0.5rem;
+      transition: transform 0.15s;
+      font-size: 0.75rem;
+    }
+    .grades-toggle .arrow.open {
+      transform: rotate(90deg);
+    }
+    .grades-content {
+      display: none;
+      margin-top: 0.75rem;
+    }
+    .grades-content.open {
+      display: block;
+    }
+    .grades-summary {
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .grade-badge {
+      display: inline-block;
+      padding: 0.125rem 0.5rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .grade-pass { background: var(--green-bg); color: var(--green); }
+    .grade-fail { background: var(--red-bg); color: var(--red); }
+    .assertion-list {
+      list-style: none;
+    }
+    .assertion-item {
+      padding: 0.625rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.8125rem;
+    }
+    .assertion-item:last-child { border-bottom: none; }
+    .assertion-status {
+      font-weight: 600;
+      margin-right: 0.5rem;
+    }
+    .assertion-status.pass { color: var(--green); }
+    .assertion-status.fail { color: var(--red); }
+    .assertion-evidence {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      margin-top: 0.25rem;
+      padding-left: 1.5rem;
+    }
+
+    /* ---- View tabs ---- */
+    .view-tabs {
+      display: flex;
+      gap: 0;
+      padding: 0 2rem;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .view-tab {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.625rem 1.25rem;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: var(--text-muted);
+      border-bottom: 2px solid transparent;
+      transition: all 0.15s;
+    }
+    .view-tab:hover { color: var(--text); }
+    .view-tab.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+    .view-panel { display: none; }
+    .view-panel.active { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
+
+    /* ---- Benchmark view ---- */
+    .benchmark-view {
+      padding: 1.5rem 2rem;
+      overflow-y: auto;
+      flex: 1;
+    }
+    .benchmark-table {
+      border-collapse: collapse;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 0.8125rem;
+      width: 100%;
+      margin-bottom: 1.5rem;
+    }
+    .benchmark-table th, .benchmark-table td {
+      padding: 0.625rem 0.75rem;
+      text-align: left;
+      border: 1px solid var(--border);
+    }
+    .benchmark-table th {
+      font-family: 'Poppins', sans-serif;
+      background: var(--header-bg);
+      color: var(--header-text);
+      font-weight: 500;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .benchmark-table tr:hover { background: var(--bg); }
+    .benchmark-table tr.benchmark-row-with { background: rgba(33, 150, 243, 0.06); }
+    .benchmark-table tr.benchmark-row-without { background: rgba(255, 193, 7, 0.06); }
+    .benchmark-table tr.benchmark-row-with:hover { background: rgba(33, 150, 243, 0.12); }
+    .benchmark-table tr.benchmark-row-without:hover { background: rgba(255, 193, 7, 0.12); }
+    .benchmark-table tr.benchmark-row-avg { font-weight: 600; border-top: 2px solid var(--border); }
+    .benchmark-table tr.benchmark-row-avg.benchmark-row-with { background: rgba(33, 150, 243, 0.12); }
+    .benchmark-table tr.benchmark-row-avg.benchmark-row-without { background: rgba(255, 193, 7, 0.12); }
+    .benchmark-delta-positive { color: var(--green); font-weight: 600; }
+    .benchmark-delta-negative { color: var(--red); font-weight: 600; }
+    .benchmark-notes {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem;
+    }
+    .benchmark-notes h3 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
+    }
+    .benchmark-notes ul {
+      list-style: disc;
+      padding-left: 1.25rem;
+    }
+    .benchmark-notes li {
+      font-size: 0.8125rem;
+      line-height: 1.6;
+      margin-bottom: 0.375rem;
+    }
+    .benchmark-empty {
+      color: var(--text-muted);
+      font-style: italic;
+      text-align: center;
+      padding: 3rem;
+    }
+
+    /* ---- Navigation ---- */
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+      flex-shrink: 0;
+    }
+    .nav-btn {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.5rem 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text);
+      transition: all 0.15s;
+    }
+    .nav-btn:hover:not(:disabled) {
+      background: var(--bg);
+      border-color: var(--text-muted);
+    }
+    .nav-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .done-btn {
+      font-family: 'Poppins', sans-serif;
+      padding: 0.5rem 1.5rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.15s;
+    }
+    .done-btn:hover {
+      background: var(--bg);
+      border-color: var(--text-muted);
+    }
+    .done-btn.ready {
+      border: none;
+      background: var(--accent);
+      color: white;
+      font-weight: 600;
+    }
+    .done-btn.ready:hover {
+      background: var(--accent-hover);
+    }
+    /* ---- Done overlay ---- */
+    .done-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+    }
+    .done-overlay.visible {
+      display: flex;
+    }
+    .done-card {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 2rem 3rem;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      max-width: 500px;
+    }
+    .done-card h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .done-card p {
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+    .done-card .btn-row {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+    .done-card button {
+      padding: 0.5rem 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      cursor: pointer;
+      font-size: 0.875rem;
+    }
+    .done-card button:hover {
+      background: var(--bg);
+    }
+    /* ---- Toast ---- */
+    .toast {
+      position: fixed;
+      bottom: 5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 0.625rem 1.25rem;
+      border-radius: var(--radius);
+      font-size: 0.875rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      z-index: 200;
+    }
+    .toast.visible {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div id="app" style="height:100vh; display:flex; flex-direction:column;">
+    <div class="header">
+      <div>
+        <h1>Eval Review: <span id="skill-name"></span></h1>
+        <div class="instructions">Review each output and leave feedback below. Navigate with arrow keys or buttons. When done, copy feedback and paste into Claude Code.</div>
+      </div>
+      <div class="progress" id="progress"></div>
+    </div>
+
+    <!-- View tabs (only shown when benchmark data exists) -->
+    <div class="view-tabs" id="view-tabs" style="display:none;">
+      <button class="view-tab active" onclick="switchView('outputs')">Outputs</button>
+      <button class="view-tab" onclick="switchView('benchmark')">Benchmark</button>
+    </div>
+
+    <!-- Outputs panel (qualitative review) -->
+    <div class="view-panel active" id="panel-outputs">
+    <div class="main">
+      <!-- Prompt -->
+      <div class="section">
+        <div class="section-header">Prompt <span class="config-badge" id="config-badge" style="display:none;"></span></div>
+        <div class="section-body">
+          <div class="prompt-text" id="prompt-text"></div>
+        </div>
+      </div>
+
+      <!-- Outputs -->
+      <div class="section">
+        <div class="section-header">Output</div>
+        <div class="section-body" id="outputs-body">
+          <div class="empty-state">No output files found</div>
+        </div>
+      </div>
+
+      <!-- Previous Output (collapsible) -->
+      <div class="section" id="prev-outputs-section" style="display:none;">
+        <div class="section-header">
+          <div class="grades-toggle" onclick="togglePrevOutputs()">
+            <span class="arrow" id="prev-outputs-arrow">&#9654;</span>
+            Previous Output
+          </div>
+        </div>
+        <div class="grades-content" id="prev-outputs-content"></div>
+      </div>
+
+      <!-- Grades (collapsible) -->
+      <div class="section" id="grades-section" style="display:none;">
+        <div class="section-header">
+          <div class="grades-toggle" onclick="toggleGrades()">
+            <span class="arrow" id="grades-arrow">&#9654;</span>
+            Formal Grades
+          </div>
+        </div>
+        <div class="grades-content" id="grades-content"></div>
+      </div>
+
+      <!-- Feedback -->
+      <div class="section">
+        <div class="section-header">Your Feedback</div>
+        <div class="section-body">
+          <textarea
+            class="feedback-textarea"
+            id="feedback"
+            placeholder="What do you think of this output? Any issues, suggestions, or things that look great?"
+          ></textarea>
+          <div class="feedback-status" id="feedback-status"></div>
+          <div class="prev-feedback" id="prev-feedback" style="display:none;">
+            <div class="prev-feedback-label">Previous feedback</div>
+            <div id="prev-feedback-text"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav" id="outputs-nav">
+      <button class="nav-btn" id="prev-btn" onclick="navigate(-1)">&#8592; Previous</button>
+      <button class="done-btn" id="done-btn" onclick="showDoneDialog()">Submit All Reviews</button>
+      <button class="nav-btn" id="next-btn" onclick="navigate(1)">Next &#8594;</button>
+    </div>
+    </div><!-- end panel-outputs -->
+
+    <!-- Benchmark panel (quantitative stats) -->
+    <div class="view-panel" id="panel-benchmark">
+      <div class="benchmark-view" id="benchmark-content">
+        <div class="benchmark-empty">No benchmark data available. Run a benchmark to see quantitative results here.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Done overlay -->
+  <div class="done-overlay" id="done-overlay">
+    <div class="done-card">
+      <h2>Review Complete</h2>
+      <p>Your feedback has been saved. Go back to your Claude Code session and tell Claude you're done reviewing.</p>
+      <div class="btn-row">
+        <button onclick="closeDoneDialog()">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ---- Embedded data (injected by generate_review.py) ----
+    const EMBEDDED_DATA = {"skill_name": "stakeholder-finder", "runs": [{"id": "eval-3-strategy-investment-with_skill", "prompt": "We're holding a steering session to set the multi-year strategy and the investment case for modernising our payments platform. Who should be in the room?", "eval_id": 3, "outputs": [{"name": "answer.md", "type": "text", "content": "# Who should be in the room \u2014 Payments platform modernisation: strategy + investment case\n\n**Issue, as I read it:** A steering session to set the **multi-year strategy** for modernising the payments platform **and** make the **investment case** for it. This is a **strategic / steering session** \u2014 about direction, mandate, budget, and sign-off, not technical design or delivery planning.\n\n**Room-breadth call (inclusive):** A pure \"set the strategy\" steering session leans *tight* (leadership-only \u2014 the most senior person in each line represents their reports). But you've explicitly added **\"the investment case for modernising.\"** That is a deliverability-and-cost question, so I'm using the **inclusive** mode: I keep one delivery-feasibility voice in the room \u2014 the person who can answer \"can we actually build this, and what will it cost / how long\" \u2014 even though it sits in the same line as the payments architect. If you actually want a tight leadership-only room, say so and I'll drop that voice to \"represented by\" (it's a one-line switch, flagged below).\n\n**Assumptions I'm making (and what I'd otherwise have asked):**\n- I'd normally ask **\"tight leadership room, or keep a delivery-feasibility voice?\"** \u2014 given the investment-case framing I've assumed **inclusive**.\n- I've assumed the modernisation is **bank-wide payments** (rails, instant payments, PSD2, resilience), not a narrow sub-component, so data and integration get a strategic seat as the discipline owners they touch.\n- A genuine steering session needs **budget-holding / sponsor-level leaders** to set mandate and sign off the investment. The wiki has **no entries** for those people \u2014 they appear only as `[[wiki-links]]`. I've surfaced them in the gap note; they are very likely the most important attendees, but I can't score them without entries.\n\nA heavy caveat on this dataset: of everyone referenced, only **six** people have actual stakeholder entries, and most of them sit at **architect / discipline** altitude rather than executive altitude. The true steering-committee leaders (CTO-equivalent, domain head's manager, programme sponsor, head of risk/compliance) are all **unprofiled links**. So the ranked list below is \"the most senior assessable people,\" and the gap note is where the real sign-off chain lives.\n\n---\n\n## Stakeholders to have in the room (ranked)\n\n### Bram Hendriks \u2014 Domain Architect, Payments \u00b7 relevance 9/10\nThe single most central **assessable** person. **Remit:** he owns payments architecture standards, payment-processing patterns, and the regulatory/resilience requirements \u2014 and his entry explicitly advocates **\"a unified payments platform\"** and aligning \"payments modernization with core banking and integration standards.\" That is precisely this session's subject. At strategy altitude he's the right level (domain owner, functional leader of the payments tribe), and in the inclusive room he carries both the architecture direction and \u2014 through his functional reports \u2014 the delivery line. *Ask him to bring the target-state payments architecture and the modernisation roadmap that the investment case will fund.*\n\n### Aisha Khan \u2014 Tribe Lead, Payments \u00b7 relevance 7/10\nThe **delivery-feasibility voice** I'm keeping because of the investment-case framing. **Remit:** she ensures payments delivery aligns with the **\"unified payments platform strategy\"** and is accountable for throughput, resilience, time-to-market, and **legacy rail dependencies / operational risk of high-volume processing** \u2014 exactly the \"can we build this, and what does it really cost in effort and risk\" input a multi-year investment case rests on. She's a different remit (delivery) from Bram (architecture), so she's a genuinely separate stream, not a duplicate \u2014 but they're in the same line (she's his functional report and reports to Jeroen Meijer). **In a *tight* leadership-only room she'd be \"represented by\" Bram and drop out**; I've kept her in because you asked for the investment case. Score is 7, not higher, because at pure-direction altitude she'd be too junior.\n\n### Anika Sharma \u2014 Head of Data Architecture \u00b7 relevance 6/10\n**Remit + altitude fit.** \"Head of\" puts her at the right strategic altitude, and payments modernisation is data-heavy \u2014 reconciliation, lineage, reusable data products, and the scalability of the data platform under high transaction volume all fall in her remit. She advocates standardized models and governance, which a multi-year payments platform will lean on. She's the **single voice for the data discipline** (she represents Lotte Peters and her other functional reports \u2014 don't also invite them). *Consult on whether the data architecture can support the target payments platform and what data-side investment it implies.*\n\n### Ahmed Benali \u2014 Integration Architect \u00b7 relevance 6/10\n**Remit + concern.** Bram's own entry names \"integration standards\" as a key alignment for payments modernisation, and Ahmed owns exactly that: API contracts, the event backbone, and killing point-to-point sprawl / brittle batch interfaces. A multi-year payments platform is an integration programme as much as a payments one. He's at architect (not \"Head of\") altitude, so for a pure-direction room he'd be borderline \u2014 but as the **discipline owner for integration** he's the one voice for that stream and his input shapes the investment case (the event-driven backbone is a cost line). *Consult on the integration target state and its build cost.*\n\n### Charlotte Dubois \u2014 Compliance Officer, Architecture \u00b7 relevance 6/10\n**Concern / sign-off lens.** Payments is one of the most regulated domains (PSD2, instant payments, audit trails), and a multi-year strategy locks in compliance posture for years. Her remit \u2014 reviewing architecture decisions for regulatory compliance, audit trails, and exception handling \u2014 is a distinct stream that none of the architects substitute for. She belongs in a steering room precisely because direction-setting is when compliance constraints are cheapest to bake in. *Ask her what regulatory commitments the strategy must hold to and what the compliance review path for the investment looks like.* (Note: her true sign-off authority sits with her managers Sanne Vermeulen / Daan Verhoeven \u2014 see gap note.)\n\n---\n\n## Boundary notes\n\n**Deliberately left out**\n- **Carlos Mendes \u2014 Cloud Architect (not ranked).** Genuinely relevant when the platform is *built* (landing zones, cost control, IaC, well-architected reviews), and cloud cost is part of any investment case \u2014 but for a *strategy/steering* session he's a build-time specialist whose cost input is better fed in *through* the roadmap than by attending in person. Add him if the steering session is specifically about a cloud-vs-on-prem platform bet, where his \"cost control / avoid sprawl\" lens becomes first-order.\n\n**Represented by their stream**\n- **Aisha Khan is the one I'd collapse first if you want a tight room** \u2014 in leadership-only mode, **Bram Hendriks represents the payments delivery line** and Aisha moves to \"represented by.\" I've kept her in because of the investment-case framing (inclusive mode). One-line switch.\n- **Maria Oliveira, Jonas Bakker, Hannah Schulz** (payments tribe members, links only) \u2014 working-level; represented by Aisha / Bram. Not steering-room altitude regardless of mode.\n- **Lotte Peters** and Anika's other functional reports (David Cohen, Eva Timmermans, Robin Janssen, Floor van der Berg) \u2014 **represented by Anika** for the data discipline.\n\n**Referenced but not in the wiki (no entry \u2014 unscored, but likely your most important attendees)**\nA steering session that sets multi-year strategy and approves investment needs budget-holders and sponsors. These people appear only as `[[wiki-links]]` \u2014 I can see their *position* but not their remit or concerns, so I can't score them. Adding their entries and re-running would let me place them properly. The ones whose position makes them likely steering-room members:\n- **[[mark-van-dijk]]** \u2014 Bram's line manager and the **functional leader of the architecture community** (functional leader to Ahmed, Anika, Carlos). Almost certainly the **chief/lead architect** \u2014 the natural chair/sign-off for an architecture strategy and investment case. Probably the single most important missing name.\n- **[[miguel-santos]]** \u2014 Ahmed's line manager and Bram's functional leader; senior architecture leadership, plausible steering member.\n- **[[jeroen-meijer]]** \u2014 Aisha's line manager; the **delivery/tribe leadership** owner for payments \u2014 likely holds the delivery budget the investment case funds.\n- **[[daan-verhoeven]]** and **[[sanne-vermeulen]]** \u2014 Charlotte's functional leader and line manager; the **compliance/risk sign-off chain** a regulated payments strategy needs.\n- **[[fatima-el-youssef]]** \u2014 Anika's line manager (and, oddly, also her functional report) \u2014 senior data leadership; relevant if the data-platform investment is material.\n\nI'd flag **mark-van-dijk** and **jeroen-meijer** (architecture mandate + delivery budget) as the two missing names I'd most want profiled before finalising this room.\n"}], "grading": null}, {"id": "eval-3-strategy-investment-without_skill", "prompt": "We're holding a steering session to set the multi-year strategy and the investment case for modernising our payments platform. Who should be in the room?", "eval_id": 3, "outputs": [{"name": "answer.md", "type": "text", "content": "# Steering Session: Payments Platform Modernisation \u2014 Strategy & Investment Case\n\n**Question:** We're holding a steering session to set the multi-year strategy and the investment case for modernising our payments platform. Who should be in the room?\n\nThis is a strategy + investment steering session, not a delivery stand-up. The room needs the people who own the payments architecture and roadmap, the cross-cutting architecture functions the modernisation will depend on (integration, data, cloud), and the compliance/regulatory voice that has to sign off the direction. Below are the relevant people from the available stakeholder profiles.\n\n## Recommended attendees\n\n### Core \u2014 payments ownership (must attend)\n\n**Bram Hendriks \u2014 Domain Architect, Payments**\nOwns payments architecture standards, payment processing patterns, and regulatory/resilience requirements. He is already advocating a unified payments platform, event-driven processing, and strong reconciliation. He is the natural architectural owner of the modernisation direction and should help frame the target state and investment case.\n\n**Aisha Khan \u2014 Tribe Lead, Payments**\nOwns payments delivery, throughput, resilience, and time-to-market for new payment products, and aligns the tribe roadmap with payments architecture and regulatory deadlines. She brings the delivery-capacity, legacy-rail-dependency, and operational-risk realities that the multi-year roadmap and investment case must reflect. Functionally aligned to Bram, so the architecture/delivery view stays joined up.\n\n### Cross-cutting architecture (should attend \u2014 modernisation depends on them)\n\n**Ahmed Benali \u2014 Integration Architect**\nPayments modernisation hinges on integration: API contracts, the event backbone, and replacing brittle batch interfaces. Ahmed governs exactly these. His event-driven and API-first direction aligns with Bram's unified-platform vision, and integration is a major cost/effort driver in the investment case.\n\n**Anika Sharma \u2014 Head of Data Architecture**\nPayments generate high-value data (reconciliation, lineage, reporting, fraud/AML inputs). Anika owns data architecture standards, pipelines, models, and governance. Multi-year strategy and investment should account for data products and platform scalability tied to payments.\n\n**Carlos Mendes \u2014 Cloud Architect**\nA multi-year modernisation almost certainly involves cloud platform choices, landing zones, and cost control \u2014 a core input to the investment case. Carlos governs landing zones, IaC, and well-architected reviews, and brings cost and security-baseline discipline to the numbers.\n\n### Compliance / regulatory (should attend \u2014 sign-off on direction)\n\n**Charlotte Dubois \u2014 Compliance Officer, Architecture**\nPayments is heavily regulated (PSD2, instant payments). Charlotte reviews architecture decisions for regulatory compliance and ensures audit trails and exception handling. Her presence keeps the strategy defensible to regulators and auditors from the outset rather than as an afterthought.\n\n## Notable gaps to fill before/at the session\n\nThe available profiles reference several senior people who are not yet documented but are clearly relevant to a steering session of this seniority. You will likely also want some of these in the room (or represented) as decision-makers and budget owners:\n\n- **Mark van Dijk** \u2014 functional/line leader across multiple architects (incl. Bram); appears to be a senior architecture leader. A multi-year strategy session needs this level of authority.\n- **Miguel Santos** \u2014 functional leader for integration/payments architecture; senior architecture decision-maker.\n- **Jeroen Meijer** \u2014 Aisha's line manager (likely tribe/area lead for payments) \u2014 owns delivery capacity and budget.\n- **Daan Verhoeven** / **Sanne Vermeulen** \u2014 compliance/governance leadership behind Charlotte.\n\nThese individuals do not have stakeholder profiles in the current dataset, so their exact roles are inferred from relationship links. Confirm and add them to the invite as the sponsoring/decision-making layer, since a steering session setting multi-year strategy and an investment case needs an accountable budget owner and senior architecture authority in the room.\n\n## Summary of the room\n\n| Attendee | Role | Why they are in the room |\n|---|---|---|\n| Bram Hendriks | Domain Architect, Payments | Owns payments target architecture and modernisation vision |\n| Aisha Khan | Tribe Lead, Payments | Delivery roadmap, capacity, operational risk, regulatory deadlines |\n| Ahmed Benali | Integration Architect | API/event backbone \u2014 a key modernisation enabler and cost driver |\n| Anika Sharma | Head of Data Architecture | Payments data, lineage, governance, platform scalability |\n| Carlos Mendes | Cloud Architect | Cloud platform choices and cost \u2014 core to the investment case |\n| Charlotte Dubois | Compliance Officer, Architecture | Regulatory/audit sign-off on the strategy |\n| (To confirm) Senior sponsor/budget owner | e.g. Mark van Dijk / Miguel Santos / Jeroen Meijer | Authority and funding decision on a multi-year investment case |\n"}], "grading": null}, {"id": "eval-5-strategy-direction-with_skill", "prompt": "We're convening a leadership steering session to set the multi-year direction and priorities for payments \u2014 purely the strategic direction and mandate, not a delivery or costing exercise. Who should be in the room?", "eval_id": 5, "outputs": [{"name": "answer.md", "type": "text", "content": "# Who should be in the room \u2014 Payments strategy steering session\n\n**Issue, as I read it:** a leadership steering session to set the multi-year direction, priorities, and mandate for payments \u2014 *strategic direction only*, explicitly **not** a delivery-planning or costing exercise.\n\n**Meeting type I'm sizing the room for:** **strategic / steering session.** That sets the altitude high \u2014 I'm biasing toward leaders who set direction, hold the budget, and sign off, and letting working-level specialists be *represented by their leader* rather than sitting in the room.\n\n**Room-breadth mode I used: tight (leadership-only).** The framing is deliberately direction-and-mandate, with delivery and cost explicitly out of scope. Under the skill's room-breadth toggle, a bare \"set the strategic direction\" with no \"can we build it / what will it cost\" signal leans tight \u2014 the most senior person in each line represents everyone below them, including different-remit reports. If you actually want a deliverability/feasibility voice in the room after all, say so and I'll switch to inclusive mode (that mainly brings the Payments Tribe Lead back in \u2014 see \"Represented by their stream\").\n\n**Assumptions I'm making (and what I'd otherwise have asked):**\n- I'd normally check **meeting type** first; your wording (\"set multi-year direction and priorities\u2026 strategic direction and mandate, not a delivery or costing exercise\") settles it as strategic \u2014 no need to ask.\n- I'd ask **tight vs inclusive room**; the explicit \"not a delivery or costing exercise\" makes tight the right default.\n- I'd ask whether **regulatory direction** (PSD2, instant payments) is in scope for the mandate. I'm assuming yes \u2014 it's intrinsic to a multi-year payments direction \u2014 so I've surfaced the compliance lens. If compliance is genuinely out of scope, drop that name.\n\nA hard constraint shapes this answer: **only 6 of the ~23 people in the wiki have actual entries.** The most senior payments leadership \u2014 the people a steering session is really *for* \u2014 appear only as `[[wiki-links]]` with no profile. I can't score them, but they're exactly the altitude this meeting needs, so they're called out prominently in the gap note below. **Please read that section \u2014 it likely contains the real chairs of this session.**\n\n---\n\n## Stakeholders to consider (ranked, profiled people only)\n\n### Bram Hendriks \u2014 Domain Architect, Payments \u00b7 relevance 8/10\n**Remit + structural.** Bram owns payments architecture standards and is the named functional leader of the whole payments architecture line. His entry's concerns are precisely strategic-direction material: a *unified payments platform*, regulatory change (PSD2, instant payments), resilience under volume, and aligning payments modernization with core banking and integration. For a multi-year direction-setting session he is the single most relevant *profiled* voice \u2014 he carries the technical north-star and, in tight mode, represents the delivery line below him (the Payments Tribe). Ask him to frame the target-state payments platform and the regulatory horizon the mandate has to clear.\n\n### Charlotte Dubois \u2014 Compliance Officer, Architecture \u00b7 relevance 6/10\n**Concern (lens).** A multi-year payments mandate is shaped by where regulation is heading (PSD2, instant payments, audit/exception standards). Charlotte's lens \u2014 keeping architecture decisions inside regulatory and internal-compliance bounds \u2014 is a direction-shaping constraint, not a delivery detail, so it belongs in a *strategy* room even though she doesn't own payments. Score reflects \"should be consulted,\" not \"owns it.\" Ask her which regulatory commitments are non-negotiable for the multi-year plan. *(Drop if you've scoped compliance out of this session.)*\n\n### Ahmed Benali \u2014 Integration Architect \u00b7 relevance 5/10\n**Concern + structural.** Payments strategy leans heavily on integration direction \u2014 Bram's own concern explicitly names aligning payments with *integration standards* and event-driven processing, which is Ahmed's remit (API-first contracts, the event backbone). He's relevant as the integration lens on the payments target state. He sits one notch below leadership altitude for a steering room, so 5/10: consult him on the integration direction, but he's arguably *represented* by the architecture leadership chain (see gap note) rather than a required seat.\n\n---\n\n## Boundary notes\n\n**Deliberately left out (profiled people I considered but didn't rank):**\n- **Anika Sharma \u2014 Head of Data Architecture.** Genuinely senior and relevant to a data-strategy session, but payments direction touches her remit only indirectly (reporting/lineage). Marginal for *this* mandate; invite only if data-product strategy is explicitly part of the payments direction.\n- **Carlos Mendes \u2014 Cloud Architect.** Cloud landing zones and cost control are a build/run concern. Relevant when payments platform *delivery* and *cost* are on the table \u2014 which you've explicitly excluded. Not for a pure direction session.\n\n**Represented by their stream (one voice per chain):**\n- **Aisha Khan \u2014 Tribe Lead, Payments** is omitted from the tight room. She's the delivery/feasibility voice for payments (throughput, time-to-market, legacy-rail risk) and sits under Bram functionally \u2014 in tight leadership-only mode, **Bram Hendriks represents the payments line**, including her delivery view. *This is the one seat that the room-breadth toggle flips:* if you want a feasibility/\"can we actually build this multi-year\" voice, switch to inclusive mode and Aisha comes back in (~6/10).\n\n**Referenced but not in the wiki \u2014 the leadership/sign-off chain this session is actually for (no entries, so unscored):**\nThese appear only as `[[wiki-links]]`. I can see their *position* but not their remit or concerns, so I can't rank them \u2014 but for a strategy/steering session they are almost certainly the senior decision-makers and budget-holders who should chair or attend:\n- **[[mark-van-dijk]]** \u2014 functional leader across the architecture practice (functional/line leader to Bram, Ahmed, Anika, Carlos). Looks like the top architecture authority \u2014 a natural owner of cross-domain strategic direction and sign-off.\n- **[[miguel-santos]]** \u2014 Bram's dotted-line functional leader and Ahmed's line manager; sits senior in the integration/architecture chain. Plausible co-owner of architecture direction.\n- **[[jeroen-meijer]]** \u2014 Aisha's line manager; the payments *delivery/business* leadership line. Likely a budget/mandate holder for payments \u2014 strong candidate for a steering seat.\n- **[[daan-verhoeven]]** / **[[sanne-vermeulen]]** \u2014 the compliance leadership chain above Charlotte; relevant if the multi-year mandate needs senior compliance/regulatory sign-off.\n- **[[yasmine-haddad]]** \u2014 cloud/platform leadership (Carlos's manager); relevant only if platform/infra strategy is in scope.\n\n**Recommendation:** before convening, add wiki entries for **Mark van Dijk, Miguel Santos, and Jeroen Meijer** in particular and re-run \u2014 a payments *steering* session is defined by exactly these leaders, and right now they're the gap. The three profiled people above are the right architectural substance for the room, but they are not, on their own, a leadership steering committee.\n"}], "grading": null}, {"id": "eval-5-strategy-direction-without_skill", "prompt": "We're convening a leadership steering session to set the multi-year direction and priorities for payments \u2014 purely the strategic direction and mandate, not a delivery or costing exercise. Who should be in the room?", "eval_id": 5, "outputs": [{"name": "answer.md", "type": "text", "content": "# Payments Leadership Steering Session \u2014 Who Should Be in the Room\n\n**Purpose framing:** This is a *strategic direction and mandate* session \u2014 setting multi-year priorities for payments. It is explicitly **not** a delivery, costing, or implementation exercise. The room should therefore be small and senior: people who set direction, own the payments mandate, hold the architecture vision, and carry the regulatory accountability. Hands-on delivery and squad-level engineering roles are intentionally excluded.\n\n## Core attendees (decision-makers)\n\n| Person | Role | Why they must be in the room |\n|--------|------|------------------------------|\n| **Aisha Khan** | Tribe Lead \u2014 Payments | Owns the payments tribe and its roadmap. She is the single person who aligns payments delivery direction with the platform strategy and regulatory deadlines. A strategic direction set without her cannot be executed. |\n| **Bram Hendriks** | Domain Architect \u2014 Payments | Owns payments architecture standards and the *unified payments platform* vision. He frames the multi-year technical direction (event-driven processing, rail consolidation, resilience) that the strategy must rest on. Functional leader to the payments tribe architects. |\n| **Mark van Dijk** | Architecture leader (functional/line leader across the architecture function) | Bram reports to him on the line, and he is the functional leader for integration, data, and cloud architects. He provides cross-domain architecture authority so payments direction stays coherent with the wider enterprise architecture. The person who can grant the architectural mandate. |\n| **Jeroen Meijer** | Senior/Tribe leadership (Aisha's line manager) | Sits above the payments tribe in the line. Strategic priorities and multi-year mandate need this level of business/leadership ownership and sponsorship to stick. |\n\n## Strongly recommended\n\n| Person | Role | Why |\n|--------|------|-----|\n| **Miguel Santos** | Architecture leadership (functional leader for integration; Bram's functional/dotted-line leader) | Payments cannot be steered in isolation from integration and core-banking direction. Brings the cross-cutting integration mandate that any payments strategy depends on. |\n| **Charlotte Dubois** (or her governance lead **Daan Verhoeven**) | Compliance Officer \u2014 Architecture | Payments is dominated by regulatory drivers (PSD2, instant payments). For a *multi-year mandate*, a regulatory/compliance voice belongs at the strategy table so the direction is set within the regulatory envelope, not retrofitted later. One compliance representative is enough. |\n\n## Optional / consult, not necessarily in the room\n\n- **Anika Sharma (Head of Data Architecture)** \u2014 relevant if data products / reporting / reconciliation data are expected to be a strategic pillar. Invite only if data strategy is on the agenda.\n- **Ahmed Benali (Integration Architect)** and **Carlos Mendes (Cloud Architect)** \u2014 bring valuable input on the event backbone and cloud foundations, but these are delivery/enabling concerns. Brief them on the outcome; keep them out of the direction-setting room to preserve its strategic altitude.\n\n## Deliberately excluded (delivery / execution layer)\n\nTo keep this a steering session and not a delivery review, the following are **not** invited: tribe squad members and engineers reporting into payments (e.g. Maria Oliveira, Jonas Bakker), and specialist/individual-contributor architects whose role is implementation rather than direction. They execute the mandate once it is set; they do not set it.\n\n## Suggested room size\n\nKeep it to roughly **4\u20136 people**: the four core decision-makers, plus the integration-architecture leader and a single compliance/governance representative. This preserves the strategic, mandate-setting nature of the session.\n\n---\n\n### Note on data completeness\nThis recommendation is drawn from the stakeholder profiles available. Detailed role descriptions were present for Aisha Khan, Bram Hendriks, Anika Sharma, Carlos Mendes, Ahmed Benali, and Charlotte Dubois. The roles of **Mark van Dijk**, **Jeroen Meijer**, **Miguel Santos**, and **Daan Verhoeven** were inferred from their reporting and functional-leadership relationships referenced across those profiles (their own profile files were not available in the dataset). If fuller profiles exist for these leaders, their exact titles and remit should be confirmed before issuing invitations.\n"}], "grading": null}], "previous_feedback": {}, "previous_outputs": {"eval-0-cloud-data-migration-with_skill": [{"name": "answer.md", "type": "text", "content": "# Who to talk to before committing to the analytics data-platform cloud migration\n\n**The issue, in my words:** You're scoping a migration of the analytics data platform off on-prem into the cloud \u2014 moving the data warehouse from AWS to Azure \u2014 and some of the data in scope is **customer financial data**. You want to know whose input or sign-off you need *before committing*.\n\n**Meeting type I'm sizing the room for:** a **strategic / steering scoping conversation** \u2014 a \"do we commit, and on what conditions\" decision-point, not yet the technical design session. \"Before we commit\" tells me you want the people who set direction, own the relevant standards, and hold sign-off \u2014 especially where regulated customer data and a cloud-provider change raise compliance and architecture-governance questions. I'm therefore biasing toward discipline leads and owners of standards, not hands-on engineers.\n\n**Assumptions I'm making (and what I'd otherwise have asked):**\n- **Regulated/customer financial data is in scope** \u2014 you said so, so compliance and data architecture are firmly pulled in.\n- **This is a decision-to-commit, not the build.** If you actually meant a technical design session, the roster shifts toward the hands-on cloud/data/integration architects (see \"Deliberately left out\") \u2014 I'd have asked which.\n- **It's the analytics warehouse moving, not the payments or core transactional estate.** I'd have asked which domain's systems are affected; the payments people are included only at the awareness/concern altitude, not as owners.\n- **It's a standalone scoping effort** unless it sits under a wider transformation programme \u2014 I'd have asked, because a programme would pull in its sponsor and leads.\n\nA note on the data: only **6 people** have full stakeholder entries I can actually assess. Several structurally important people (functional leaders, the escalation/sign-off chain) appear only as wiki-links with no entry \u2014 I've surfaced them, unscored, in the boundary notes, because for a \"before we commit\" decision they're often exactly the altitude you need.\n\n---\n\n## Stakeholders to consult, highest relevance first\n\n### Anika Sharma \u2014 Head of Data Architecture \u00b7 relevance 9/10\n**Remit + concern.** This migration *is* her remit: she \"defines data architecture standards, governs pipelines and models, and ensures alignment with data governance and platform strategy,\" and explicitly owns \"scalability and performance of the data platform.\" Moving the analytics warehouse to a different cloud is a platform-strategy and data-governance decision that sits squarely with her \u2014 and her stated concern about \"lack of lineage visibility\" is exactly what's at risk when customer financial data crosses platforms. She's at the right altitude for a commit decision (a \"Head of\"). **Align with her on:** target-state data architecture on Azure, lineage/governance continuity for the financial data, and whether the move fits the platform strategy.\n\n### Charlotte Dubois \u2014 Compliance Officer, Architecture \u00b7 relevance 9/10\n**Concern + remit.** Customer financial data plus a change of cloud provider is precisely her territory: she \"reviews architecture decisions for regulatory compliance and ensures audit trails and exception handling are maintained,\" and worries about \"undocumented exceptions\" and \"divergence from approved standards.\" A cross-cloud migration of regulated data is the kind of decision that needs a compliance read *before* commitment, not after. **Align with her on:** data residency / cross-border transfer, regulatory approval, and getting the decision and any exceptions documented for audit.\n\n### Carlos Mendes \u2014 Cloud Architect \u00b7 relevance 7/10\n**Remit + concern.** He \"designs and governs cloud landing zones, IaC modules, and well-architected reviews across workloads\" \u2014 an AWS-to-Azure move lands directly on the landing-zone and security-baseline work he owns, and his concerns (cost control, \"consistent network and security baselines,\" avoiding cloud sprawl) are first-order questions for whether this commitment is sound. He's more hands-on than the others here, so for a pure steering conversation he's slightly below the leads \u2014 but a cloud *provider switch* genuinely hinges on his expertise, so he belongs in this room. **Align with him on:** Azure landing-zone readiness, security baseline for financial data, and a realistic cost/effort read to inform the commit.\n\n### Ahmed Benali \u2014 Integration Architect \u00b7 relevance 6/10\n**Remit + concern.** An analytics warehouse rarely moves alone \u2014 the pipelines and interfaces feeding it have to follow. Ahmed \"designs integration patterns, governs API contracts,\" and worries about \"brittle batch interfaces\" and \"point-to-point sprawl,\" which is exactly the integration risk a warehouse migration exposes. Consult him to pressure-test feasibility and scope the integration impact before you commit; he's not the decision owner. **Align with him on:** which feeds/contracts break or need rework, and the migration sequencing implications.\n\n### Bram Hendriks \u2014 Domain Architect, Payments \u00b7 relevance 5/10\n**Concern (awareness).** Included only because you flagged **customer financial data**: if any of that originates from or reconciles against the payments domain, Bram \u2014 who owns payments architecture and worries about \"regulatory change\" and \"strong reconciliation patterns\" \u2014 has a stake in how that data is handled and where it lands. He's a should-be-aware consultee, not an owner, and only if payments data is actually in scope. **Ask him:** whether any in-scope financial data touches payments, and any reconciliation/regulatory constraints that follow it.\n\n---\n\n## Boundary notes\n\n**Deliberately left out**\n- **Aisha Khan (Tribe Lead \u2014 Payments)** \u2014 payments *delivery*, one altitude below Bram and focused on throughput/time-to-market. For a commit-level decision the payments concern is represented by Bram; she'd matter at delivery-planning time, not now. (See also \"represented by their stream\".)\n- **The hands-on / design-session crowd in general** \u2014 if this were the technical *design* session rather than a commit decision, Carlos and Ahmed would rise to the top and you'd add the working-level data/cloud engineers. At \"should we commit\" altitude they're consulted for feasibility, not running the room.\n\n**Represented by their stream**\n- **Aisha Khan is represented by Bram Hendriks** for the payments line in this strategic conversation \u2014 same functional chain (Aisha's functional leader is Bram), and Bram speaks to the architecture/regulatory concern at the right altitude. Pull Aisha in directly only if delivery sequencing of payments-owned data becomes the topic.\n\n**Referenced but not in the wiki (no entry \u2014 unscored, but likely the sign-off / escalation chain you'll need for a commit)**\n- **Mark van Dijk** \u2014 functional (dotted-line) leader of Anika, Carlos, Ahmed *and* Bram; he's the architecture-discipline leader the whole technical roster rolls up to. For a \"before we commit\" decision he's very plausibly the architecture sign-off / escalation point. No entry exists, so I can't assess his remit or score him \u2014 **add his entry and I can place him properly.**\n- **Daan Verhoeven** \u2014 Charlotte's functional (dotted-line) leader; likely the head of the compliance/governance discipline, i.e. where compliance sign-off escalates. Same caveat \u2014 no entry to assess.\n- **Fatima el-Youssef** \u2014 Anika's line manager (and, interestingly, a functional report of Anika's), sitting in the data leadership chain; a candidate budget/direction owner for the data platform.\n- **Yasmine Haddad** \u2014 Carlos's line manager, in the cloud/infrastructure leadership chain; plausibly owns the cloud-platform direction and cost envelope a provider switch commits you to.\n- **Sanne Vermeulen** \u2014 Charlotte's line manager, in the compliance reporting chain.\n\nFor a genuine commit decision, the sign-off altitude almost certainly lives in **Mark van Dijk** (architecture) and **Daan Verhoeven** (compliance), with **Yasmine Haddad** / **Fatima el-Youssef** as the likely platform/budget owners. I've kept them unscored because their remits aren't recorded \u2014 **creating their entries and re-running would let me tell you which of them actually holds the pen.**\n"}], "eval-0-cloud-data-migration-without_skill": [{"name": "answer.md", "type": "text", "content": "# Who to talk to before committing to the analytics data platform cloud migration\n\nYou're scoping a migration of the analytics data platform from on-prem to cloud, moving the data warehouse from AWS to Azure, and some of the data is customer financial data. That combination touches **data architecture, cloud landing zones, and regulatory compliance** most directly, with integration as a secondary concern.\n\nBased on the stakeholder profiles available, here is who you should engage and why.\n\n## Talk to first (core decision-makers)\n\n### Anika Sharma \u2014 Head of Data Architecture\n**Why she's essential:** This is her platform. She defines data architecture standards, governs pipelines and data models, and owns alignment with data governance and platform strategy. A warehouse migration goes to the heart of her remit.\n- Her stated concerns map directly to migration risk: **fragmented pipelines, inconsistent data models, lack of lineage visibility, and the scalability/performance of the data platform.**\n- She promotes reusable data products and standardized models and enforces governance with the tribes \u2014 so any re-platforming needs her buy-in to avoid creating new fragmentation.\n- **Engage her on:** target data architecture on Azure, pipeline/lineage continuity through the migration, performance and scalability of the new warehouse, and governance.\n\n### Carlos Mendes \u2014 Cloud Architect\n**Why he's essential:** He designs and governs cloud landing zones, IaC modules, and well-architected reviews across workloads. Any move to Azure runs through him.\n- His concerns are squarely relevant: **cost control, consistent network and security baselines, and avoiding cloud sprawl.**\n- He'll want this done via reusable landing-zone blueprints and IaC, and put through a well-architected review before commitment.\n- **Engage him on:** the Azure landing zone, network/security baseline for the warehouse, cost model (an AWS-to-Azure change has real cost and egress implications), and the well-architected review gate.\n\n### Charlotte Dubois \u2014 Compliance Officer (Architecture)\n**Why she's essential:** Customer financial data plus a change of cloud provider raises regulatory, data-residency, and audit questions. She reviews architecture decisions for regulatory compliance and ensures audit trails and exception handling are maintained.\n- Her concerns are exactly the failure modes here: **undocumented exceptions, gaps in audit trails, and divergence from approved standards.**\n- She embeds compliance checks into the architecture review process, so engaging her early keeps the decision auditable rather than retrofitting compliance later.\n- **Engage her on:** regulatory treatment of customer financial data, data residency/sovereignty on Azure, audit trail continuity, and whether this needs a documented exception or sign-off.\n\n## Talk to as a secondary stakeholder\n\n### Ahmed Benali \u2014 Integration Architect\n**Why he's relevant:** He governs integration patterns, API contracts, and the event backbone. The analytics platform almost certainly ingests from upstream systems, so re-pointing those feeds during the migration is integration work.\n- His concerns \u2014 **point-to-point sprawl, inconsistent API contracts, and brittle batch interfaces** \u2014 are real risks when source feeds get re-wired to a new warehouse.\n- **Engage him on:** how data lands in the warehouse, batch vs. event-driven ingestion, and keeping contracts stable through the cut-over.\n\n## Worth noting / likely follow-ups\n\n- **Anika reports to Fatima El-Youssef** and **Carlos reports to Yasmine Haddad** (and both have **Mark van Dijk** as functional/architecture leader). These leaders are referenced as Anika's and Carlos's managers but do not have profiles in the available data. Given the scope and the financial-data risk, **funding and final sign-off will likely sit at that leadership level**, so plan to escalate to them (via Anika and Carlos) once the technical and compliance shape is agreed.\n- **Charlotte reports to Sanne Vermeulen** (governance) with **Daan Verhoeven** as functional leader. If a formal compliance exception or governance ruling is needed, expect Charlotte to route it upward there.\n- The **Payments stakeholders (Aisha Khan, Bram Hendriks)** in the data set are not directly relevant unless the analytics platform consumes payments data specifically; if customer financial data includes payments/transaction data, loop Bram in on the data-source and regulatory side.\n\n## Suggested sequence\n1. **Anika + Carlos** together \u2014 agree the target data architecture and Azure landing-zone shape, and trigger a well-architected review.\n2. **Charlotte** \u2014 early, to confirm regulatory/residency/audit constraints on customer financial data before the design hardens.\n3. **Ahmed** \u2014 on ingestion and integration impact.\n4. **Escalate to the architecture/owning leadership (Mark van Dijk, plus Fatima/Yasmine)** for the commit decision once technical feasibility and compliance are confirmed.\n\n> Note: This analysis is drawn from the six stakeholder profiles available in the data set. Several referenced leaders (Mark van Dijk, Fatima El-Youssef, Yasmine Haddad, Sanne Vermeulen, Daan Verhoeven) do not have their own profiles, so their specific concerns are inferred from their roles only.\n"}], "eval-1-instant-payments-with_skill": [{"name": "answer.md", "type": "text", "content": "# Stakeholders for SEPA Instant Payments / PSD2 modernisation\n\n**The issue:** You want to modernise the payment rails to support SEPA instant payments, with PSD2 regulatory deadlines forcing the timeline. This is a payments-domain modernisation that is simultaneously an architecture decision (new rails, integration patterns) and a compliance-driven programme (PSD2 deadlines).\n\n**Meeting type I'm sizing the room for:** \"Who do I need to **align** with\" reads to me as a **strategic / steering alignment** \u2014 agreeing the direction, the mandate, and who owns the regulatory commitment \u2014 rather than a hands-on design session. I've biased the roster toward people who own the decision and its sign-off, and toward one voice per stream.\n\n**Assumptions I'm making (and what I'd otherwise have asked):**\n- I'm treating this as a **strategy/alignment** conversation, not a technical design session. *I'd have asked: is this to set direction and secure sign-off, or to actually design the rails?* If it's the latter, the altitude shifts down (Aisha and Ahmed rise, a \"Head of\" drops out) \u2014 I flag that per person below.\n- I'm assuming **regulated customer payment data is in scope** (it always is for PSD2/SEPA), which is why Compliance is on the list.\n- I'm assuming this is an **enterprise-level rail change**, not a one-off project, so the payments domain architect \u2014 not just the delivery tribe \u2014 is central.\n\n---\n\n### Bram Hendriks \u2014 Domain Architect, Payments \u00b7 relevance 10/10\nSquarely **remit**: his entry literally names \"regulatory change (PSD2, instant payments)\" and \"fragmented payment rails\" as core concerns, and he owns payments architecture standards and processing patterns. He is the one person whose accountability is this exact issue, and he promotes a \"unified payments platform\" \u2014 which is what modernising the rails amounts to. He's the right altitude for an alignment conversation: senior enough to set direction, close enough to own the technical shape. **Align with him first** on the target rail architecture and how it maps to the PSD2 deadlines.\n\n### Charlotte Dubois \u2014 Compliance Officer, Architecture \u00b7 relevance 8/10\n**Remit + concern**: PSD2 is a regulatory mandate, and she reviews architecture decisions for regulatory compliance and owns audit trails and exception handling. Modernising rails under a regulatory deadline is precisely where her sign-off matters \u2014 you need her to confirm the approach evidences PSD2 compliance and doesn't create undocumented exceptions. Bring her in early so compliance shapes the design rather than blocking it at the end.\n\n### Ahmed Benali \u2014 Integration Architect \u00b7 relevance 7/10\n**Remit + concern**: SEPA instant payments are an integration problem as much as a payments one \u2014 real-time messaging, API contracts, and the event backbone he governs. His stated concerns (point-to-point sprawl, brittle batch interfaces, event-driven integration) are exactly the patterns instant payments force you to fix; legacy rails are typically batch, and \"instant\" means event-driven. Align with him on how the new rails plug into the API gateway and event backbone. *(In a design session he'd rise toward 9.)*\n\n### Aisha Khan \u2014 Tribe Lead, Payments \u00b7 relevance 6/10\n**Remit + structural**: she delivers payments and her remit explicitly aligns the tribe's roadmap \"with the payments architecture and regulatory deadlines\"; her concerns name \"legacy rail dependencies\" directly. She owns whether this is deliverable and on what timeline. For a *strategic* alignment she is partly **represented by Bram** (he is her functional leader for the payments architecture line), so I've scored her below him \u2014 but she's the right person the moment the conversation turns to sequencing, team commitment, and time-to-market, so I'd keep her in the loop. *(For a tactical/delivery-planning meeting she rises to 8\u20139.)*\n\n---\n\n**Boundary notes**\n\n- **Deliberately left out \u2014 Anika Sharma (Head of Data Architecture):** payments modernisation touches reconciliation and transaction data, but her remit (data pipelines, models, lineage) isn't central to the rails or the PSD2 deadline. Worth a heads-up if the rail change reshapes the payments data model, not a core alignment partner.\n- **Deliberately left out \u2014 Carlos Mendes (Cloud Architect):** relevant at build time (landing zones, IaC for the new rail workloads), not for a direction-and-mandate alignment. Pull him in once the architecture is agreed and it's about where/how it runs.\n- **Represented by their stream \u2014 Aisha Khan via Bram Hendriks** for the *strategic* framing of this question: Bram is her functional leader for payments architecture and stands in for the payments line when setting direction. Reverse this if the meeting is really about delivery planning, where Aisha leads.\n- **Referenced but not in the wiki (no entry \u2014 unscored, follow-up leads):**\n  - **[[mark-van-dijk]]** \u2014 functional leader of the architects (Bram's line manager and the architecture functional lead across the org). Looks like the chief/lead architect and a likely **sign-off / escalation point** for a cross-domain rail change. For a strategy meeting this is probably the altitude you ultimately need \u2014 add his entry to place him properly.\n  - **[[daan-verhoeven]]** \u2014 Charlotte's functional (dotted-line) compliance leader; likely the senior compliance owner who carries the **PSD2 regulatory accountability**. The natural escalation point above Charlotte for the deadline commitment.\n  - **[[miguel-santos]]** \u2014 Ahmed's line manager and Bram's functional leader; appears to sit over the payments/integration domain and could be a delivery or domain sponsor.\n  - **[[jeroen-meijer]]** \u2014 Aisha's line manager (payments delivery line); a likely budget/resourcing owner for the tribe.\n  - None of these have stakeholder entries, so I can't read their actual remit or concerns and haven't scored them. They're exactly the senior sign-off / escalation chain a strategic alignment usually needs \u2014 **adding their entries and re-running would let me place them in the ranked list.**\n\n**Gap to note:** no one in the wiki holds an explicit **payments product / business-owner** role (the revenue/customer-proposition side of SEPA instant payments). If a business sponsor owns the \"why now\" and the budget, they're missing from this dataset and worth identifying outside it.\n"}], "eval-1-instant-payments-without_skill": [{"name": "answer.md", "type": "text", "content": "# Stakeholder Alignment \u2014 SEPA Instant Payments & PSD2 Modernisation\n\n**Question:** We need to modernise our payment rails to support SEPA instant payments and the PSD2 deadlines are coming. Who do I need to align with?\n\nThis initiative touches three things at once: **payments architecture and rails**, **regulatory/compliance deadlines (PSD2, instant payments)**, and the **integration and delivery** needed to ship it. The stakeholders below are drawn from the available people files, grouped by why they matter to you.\n\n> Note: The stakeholder files cross-reference several people (e.g. Mark van Dijk, Miguel Santos, Jeroen Meijer, Maria Oliveira, Jonas Bakker, Hannah Schulz, Daan Verhoeven, Sanne Vermeulen) who do not yet have their own profile files. Where they are clearly relevant to this initiative, they are flagged at the end as people to also pull in.\n\n---\n\n## Tier 1 \u2014 Primary stakeholders (align first)\n\n### Bram Hendriks \u2014 Domain Architect, Payments\n**The single most important person for this initiative.** His remit is defining payments architecture standards, governing payment processing patterns, and ensuring regulatory and resilience requirements are met. His recorded concerns explicitly name **regulatory change (PSD2, instant payments)**, **fragmented payment rails**, and **resilience under high transaction volumes**. He promotes a unified payments platform, event-driven processing, and strong reconciliation patterns. He is the functional leader for the payments tribe. Your modernisation effort should be shaped with him from the start.\n\n### Aisha Khan \u2014 Tribe Lead, Payments\nOwns delivery for the payments tribe and is responsible for ensuring payments delivery **complies with architecture and regulatory standards** and aligns with the unified payments platform strategy. Her concerns include **legacy rail dependencies**, throughput, resilience, and time-to-market \u2014 directly the trade-offs in moving to SEPA instant rails. She aligns the tribe roadmap with payments architecture and **regulatory deadlines**, so she is the person who turns this into delivered work and owns the timeline against the PSD2 deadline. (She has direct reports Maria Oliveira and Jonas Bakker who will do the build.)\n\n### Charlotte Dubois \u2014 Compliance Officer, Architecture\nPSD2 is a hard regulatory deadline, so compliance must be aligned early, not at the end. Charlotte reviews architecture decisions for **regulatory compliance** and ensures **audit trails and exception handling**. Her concerns \u2014 undocumented exceptions, gaps in audit trails, divergence from approved standards \u2014 are exactly what a regulator will probe on a PSD2 programme. Engage her to confirm the compliance evidence and review path.\n\n---\n\n## Tier 2 \u2014 Closely involved (align early)\n\n### Ahmed Benali \u2014 Integration Architect\nSEPA instant payments require real-time, always-on connectivity to payment schemes and internal systems. Ahmed governs **API contracts** and drives the **event backbone**, and is concerned with point-to-point sprawl and brittle batch interfaces. Bram's preferred event-driven processing pattern depends on Ahmed's integration backbone, so he must be aligned on the rails' integration design and PSD2's open-banking API obligations.\n\n---\n\n## Tier 3 \u2014 Consult / keep informed\n\n### Carlos Mendes \u2014 Cloud Architect\nInstant payments are 24/7, low-latency, high-availability workloads. If the new rails run in the cloud, Carlos's landing zones, network/security baselines, and well-architected reviews are relevant to the resilience and availability targets. Consult on the platform/hosting and non-functional requirements.\n\n### Anika Sharma \u2014 Head of Data Architecture\nPayments generate transaction data needing reconciliation, lineage, and reporting \u2014 and PSD2 carries data-sharing/transparency dimensions. Anika governs data models, pipelines, and lineage. Involve her where the initiative touches reconciliation data, reporting, and data governance.\n\n---\n\n## Also pull in (referenced but no profile file available)\nThese names appear in the reporting lines of the people above and are likely relevant; confirm and engage them directly:\n\n- **Maria Oliveira & Jonas Bakker** \u2014 direct reports of Aisha Khan; the delivery/engineering capacity inside the payments tribe.\n- **Hannah Schulz** \u2014 functional report of Bram Hendriks within the payments domain.\n- **Mark van Dijk** \u2014 functional leader / chief-architect line above the architects (Bram, Ahmed, Carlos, Anika report to him functionally); needed for architecture sign-off and cross-domain alignment.\n- **Miguel Santos** \u2014 functional leader for payments architecture and line manager for integration; relevant to architecture governance.\n- **Jeroen Meijer** \u2014 Aisha's line manager; relevant for delivery prioritisation and funding.\n- **Sanne Vermeulen / Daan Verhoeven** \u2014 Charlotte's management chain on the compliance/governance side; relevant for formal compliance sign-off.\n\n---\n\n## Suggested alignment sequence\n1. **Bram Hendriks** \u2014 agree the target architecture and the instant-payments/PSD2 approach.\n2. **Aisha Khan** \u2014 translate into a delivery roadmap against the PSD2 deadline.\n3. **Charlotte Dubois** \u2014 lock the compliance and audit requirements early.\n4. **Ahmed Benali** \u2014 design the integration/event backbone for the new rails.\n5. **Carlos Mendes & Anika Sharma** \u2014 confirm hosting/resilience and data/reconciliation needs.\n6. Bring in the wider chain (Mark van Dijk, Miguel Santos, Jeroen Meijer, plus the compliance management line) for governance sign-off and funding.\n"}], "eval-2-api-gateway-with_skill": [{"name": "answer.md", "type": "text", "content": "# Who to talk to: standardising cross-domain integration (API gateway + event backbone, retiring point-to-point batch)\n\n**Issue, in my words:** You want to standardise how domains integrate by introducing two shared platform capabilities \u2014 a managed API gateway and a shared event backbone \u2014 and decommissioning the sprawl of point-to-point batch interfaces. This is a cross-cutting architecture initiative that needs both technical design and cross-domain buy-in/mandate.\n\n**Meeting type I'm sizing for:** This reads as a **strategic / steering session** first \u2014 you're \"proposing\" a direction that affects every domain and involves retiring existing interfaces, which needs a mandate, prioritisation, and sign-off before design work. So I bias toward leads and functional owners who can commit a domain or set a standard, and I represent working-level specialists by their leader rather than stacking the chain. Where useful, I flag who you'd pull into the **follow-on design session**.\n\n**What I'd have asked (assumptions stated, since this is non-interactive):**\n- *Is this a one-off proposal or part of a standing transformation programme?* \u2014 Assumed a standing standardisation initiative across domains.\n- *Is regulated / customer or payments data flowing over these batch interfaces being retired?* \u2014 Assumed **yes**, given a financial-services org with a payments domain; that pulls in compliance and the payments line.\n- *Strategic mandate-setting or already-mandated design session?* \u2014 Assumed **strategic/steering** (you're still \"proposing\").\n\n---\n\n### Ahmed Benali \u2014 Integration Architect \u00b7 relevance 10/10\nThe owner. His remit is literally *\"Designs integration patterns, governs API contracts, and drives adoption of the event backbone,\"* and his stated concerns are *\"point-to-point sprawl, inconsistent API contracts, and brittle batch interfaces\"* \u2014 he already advocates *\"a managed API gateway and event backbone.\"* This is his initiative in all but name (remit + concern). He's the one person who is central to both the strategy room and the eventual design room. Align with him first; he likely has the technical proposal already.\n\n### Bram Hendriks \u2014 Domain Architect, Payments \u00b7 relevance 8/10\nStrongest domain stakeholder for a cross-domain integration standard. Remit: *\"Aligning payments modernization with core banking and integration standards is key,\"* and he promotes *\"event-driven processing\"* \u2014 so a shared event backbone directly intersects his architecture (remit + concern). Payments is also where retiring batch interfaces carries the most risk (reconciliation, instant payments). For a strategic session he's the right altitude to commit the payments domain and represents the payments delivery line beneath him.\n\n### Anika Sharma \u2014 Head of Data Architecture \u00b7 relevance 8/10\nRetiring point-to-point batch interfaces is squarely a data-flow change \u2014 those batch jobs move data between domains. Her concerns are *\"fragmented pipelines, inconsistent data models, and lack of lineage visibility,\"* and she promotes *\"reusable data products and standardized models\"* (concern + remit). Moving from batch to an event backbone changes pipelines and lineage, so she needs to be at the table to align the event model with data governance. As a \"Head of\" she's the right altitude for a strategic room and represents her data architects (e.g. her direct report) rather than each attending.\n\n### Charlotte Dubois \u2014 Compliance Officer, Architecture \u00b7 relevance 6/10\nDecommissioning interfaces and standing up a new gateway/backbone is exactly the kind of change her remit covers: *\"Reviews architecture decisions for regulatory compliance and ensures audit trails and exception handling are maintained,\"* with concerns about *\"undocumented exceptions, gaps in audit trails, and divergence from approved standards\"* (remit + concern). If regulated/payments data flows over the batch interfaces being retired, she needs to confirm audit-trail and exception handling survive the migration. Consult her on the proposal; she doesn't need to be in every design detail.\n\n### Aisha Khan \u2014 Tribe Lead, Payments \u00b7 relevance 5/10\nRelevant because retiring batch interfaces and adopting the event backbone lands as delivery work on her tribe \u2014 her concerns include *\"legacy rail dependencies\"* and *\"throughput, resilience, and time-to-market\"* (concern + structural). For a **strategic** session she's largely **represented by Bram** (her functional leader / the payments architecture voice). I'd surface her into the **tactical/delivery planning** session, where committing the payments tribe and sequencing the batch retirement actually happens \u2014 there she'd be a 7\u20138.\n\n---\n\n### Boundary notes\n\n**Deliberately left out**\n- **Carlos Mendes \u2014 Cloud Architect.** A managed API gateway and event backbone will run somewhere (landing zones, IaC), so he's genuinely relevant *at build/design time* \u2014 but for a strategic proposal about integration standards he's not yet needed. Bring him into the design session when you're deciding how the gateway/backbone is hosted and operated.\n\n**Represented by their stream**\n- **Aisha Khan (Tribe Lead, Payments)** is represented by **Bram Hendriks** for this strategic session \u2014 same payments line, and the architecture voice is the right altitude to set direction. Reverse this for delivery planning, where Aisha is the one who commits the tribe.\n- **Anika Sharma's data architects** (her direct report and functional reports) are represented by Anika for a strategic room; pull the relevant data architect into design only if the event-schema work needs hands-on data modelling.\n\n**Referenced but not in the wiki (no entry \u2014 unscored, follow up)**\nThese appear only as `[[wiki-links]]` in the entries above, so I can place them structurally but can't read a remit/concern \u2014 I won't score them. They're likely your escalation/sign-off chain for a cross-domain mandate, which is exactly what a strategic session needs:\n- **Mark van Dijk** \u2014 the *functional leader* (dotted line) for Ahmed (Integration Architect), Anika (Data Architecture), and Carlos (Cloud), and line manager of Bram. He sits across the whole architecture discipline, so a cross-domain integration *standard* almost certainly needs his mandate or sign-off. **Strongest missing name** \u2014 add his entry and I can place him properly (probably top-tier for this strategic room).\n- **Miguel Santos** \u2014 Ahmed's line manager and Bram's functional leader; plausibly the integration/engineering leadership Ahmed escalates through. Worth identifying as a likely sponsor.\n- **Daan Verhoeven / Sanne Vermeulen** \u2014 Charlotte's functional leader and line manager; the governance/compliance leadership who would own sign-off if the batch-retirement touches regulated data.\n- **Fatima el-Youssef** \u2014 Anika's manager (and oddly listed as one of her functional reports); senior data leadership worth confirming.\n\nAdding entries for **Mark van Dijk** and **Miguel Santos** in particular would let me rank the people who can actually *mandate* this standard across domains \u2014 right now I can see the doers and domain owners clearly, but the cross-domain sign-off chain is inferred from links rather than read.\n"}], "eval-2-api-gateway-without_skill": [{"name": "answer.md", "type": "text", "content": "# Who to talk to: Standardising cross-domain integration (API gateway + event backbone, retiring point-to-point batch)\n\nYour proposal has three load-bearing parts: (1) a **managed API gateway**, (2) a **shared event backbone**, and (3) **retiring point-to-point batch interfaces**. Below are the stakeholders to engage, grouped by why they matter, drawn from the stakeholder profiles available.\n\n## Start here \u2014 your natural sponsor and co-author\n\n### Ahmed Benali \u2014 Integration Architect\n**This is your single most important contact.** His remit is literally *\"Designs integration patterns, governs API contracts, and drives adoption of the event backbone.\"* His recorded concerns are **point-to-point sprawl, inconsistent API contracts, and brittle batch interfaces** \u2014 and he already promotes **API-first contracts, event-driven integration, and a managed API gateway and event backbone.**\n\nYour proposal is, almost word-for-word, Ahmed's agenda. Treat him as your co-author and primary ally. Get alignment with him before taking this anywhere else.\n- Reports to: **Miguel Santos** (line manager)\n- Functional leader: **Mark van Dijk**\n\n## Decision-makers / sponsors to secure (escalation path)\n\nThese two sit above the integration architecture function and are the route to a mandate for a cross-domain standard.\n\n### Mark van Dijk \u2014 Functional leader for architecture\nHe is the functional leader (dotted-line) for Ahmed Benali, Carlos Mendes, and Anika Sharma, and the line manager for the Payments Domain Architect (Bram Hendriks). He sits across the architecture community, so a cross-domain integration standard needs his backing. *(No standalone profile available \u2014 inferred from the relationship graph; confirm his exact title.)*\n\n### Miguel Santos \u2014 Ahmed's line manager\nMiguel is Ahmed's line manager and is the functional leader for the Payments domain architecture. He is a key sponsor for giving the integration standard organisational weight. *(No standalone profile available \u2014 inferred from relationships; confirm title.)*\n\n## Domain owners whose interfaces you'll change\n\nA cross-domain standard only works if the domains buy in. These are the people whose point-to-point batch interfaces you want to retire and who must adopt the gateway/backbone.\n\n### Bram Hendriks \u2014 Domain Architect, Payments\nHigh-priority stakeholder. He promotes a **unified payments platform, event-driven processing, and strong reconciliation patterns**, and explicitly cares about *\"aligning payments modernization with core banking and integration standards.\"* He is a natural ally for the event backbone \u2014 but he'll scrutinise resilience under high transaction volumes and reconciliation when retiring batch interfaces. Engage early.\n\n### Aisha Khan \u2014 Tribe Lead, Payments\nOwns payments **delivery** (throughput, resilience, time-to-market) and has **legacy rail dependencies**. If batch interfaces feed payment processing, she owns the operational risk of changing them and the delivery roadmap to do so. Bring her in on sequencing and migration impact.\n\n> Note: Payments is the only domain with profiles available. Other domains (e.g. lending, core banking) will have equivalent domain architects / tribe leads you should identify and engage the same way \u2014 the data here doesn't cover them.\n\n## Data architecture \u2014 batch retirement is largely a data-flow change\n\n### Anika Sharma \u2014 Head of Data Architecture\nImportant. Point-to-point batch interfaces are often **data pipelines**, and her concerns are exactly *\"fragmented pipelines, inconsistent data models, and lack of lineage visibility.\"* She promotes **reusable data products and standardized models** \u2014 well aligned with your event backbone, but she'll want lineage, data contracts, and governance preserved as you move from batch to events. Co-design the event schemas / data contracts with her team.\n\n## Cloud platform \u2014 where the gateway and backbone will run\n\n### Carlos Mendes \u2014 Cloud Architect\nA managed API gateway and an event backbone are platform capabilities that live in his **landing zones**. His concerns \u2014 **consistent network/security baselines, cost control, avoiding cloud sprawl** \u2014 apply directly to standing up shared gateway/backbone infrastructure. Engage him on hosting, IaC modules, and well-architected review.\n\n## Governance & compliance \u2014 to make the standard stick (and pass audit)\n\n### Charlotte Dubois \u2014 Compliance Officer, Architecture\nEngage once the proposal firms up. Retiring established (batch) interfaces and mandating a new standard creates exactly what she watches for: **undocumented exceptions, gaps in audit trails, and divergence from approved standards.** She can help embed the new integration standard into the architecture review process so adoption is enforceable \u2014 and ensure batch-to-event migrations keep their audit trails (relevant for payments).\n\n## Suggested sequence\n\n1. **Ahmed Benali** \u2014 align on the proposal; make him co-owner.\n2. **Mark van Dijk / Miguel Santos** \u2014 secure sponsorship and a mandate for a cross-domain standard.\n3. **Bram Hendriks + Aisha Khan** \u2014 first domain (Payments); strongest natural allies and highest-risk interfaces.\n4. **Anika Sharma** \u2014 data contracts, lineage, and pipeline/batch migration.\n5. **Carlos Mendes** \u2014 platform hosting for gateway + backbone.\n6. **Charlotte Dubois** \u2014 bake the standard and exception handling into governance.\n\n## Caveats on the data\n- Only six stakeholder profiles were available (Ahmed Benali, Aisha Khan, Anika Sharma, Bram Hendriks, Carlos Mendes, Charlotte Dubois).\n- **Mark van Dijk** and **Miguel Santos** are referenced as leaders but have no profiles \u2014 their roles are inferred from the reporting graph; confirm titles before escalating.\n- Domains other than Payments aren't represented in the data, but a cross-domain standard will need their architects/tribe leads too \u2014 identify them separately.\n"}], "eval-3-strategy-payments-with_skill": [{"name": "answer.md", "type": "text", "content": "# Who should be in the room \u2014 Payments platform modernisation (steering session)\n\n**The issue, in my words:** You're setting the *multi-year strategy* and the *investment case* for modernising the payments platform \u2014 direction, mandate, and money, not the technical design.\n\n**Meeting type I'm sizing for:** **Strategic / steering session.** Your wording (\"steering session\", \"multi-year strategy\", \"investment case\") settles this \u2014 I don't need to ask. That altitude biases the room toward people who set direction, own the payments mandate, and can speak to (or sign off) the spend, and pushes hands-on/design specialists down to \"represented by their leader\".\n\n**Assumptions I'd otherwise have check-questioned:**\n- I'm treating this as a leadership/budget conversation, so I'm surfacing the *senior* end of each payments stream and leaving the makers out (they're represented). If you actually want a mixed working+steering room, pull Ahmed Benali up from the boundary note.\n- I'm assuming the strategy is firm-wide for payments (rails, resilience, regulatory roadmap), so compliance belongs in the room. If the session is purely financial/portfolio with compliance handled separately, drop Charlotte to a pre-read.\n\nA real caveat up front: this wiki has only **six profiled people**, and the actual budget-holders / sign-off chain for a strategy session of this size appear only as `[[wiki-links]]` with no entries. The scored list below is the right *content* of the room from the people I can assess; the **\"Referenced but not in the wiki\"** note is where the people who'd typically *chair and fund* this session sit \u2014 read both together.\n\n---\n\n### Bram Hendriks \u2014 Domain Architect, Payments \u00b7 relevance 9/10\n**Remit + concern, and the right altitude for this room.** His remit is, almost word for word, the subject of the meeting: \"Defines payments architecture standards... promotes **a unified payments platform**, event-driven processing.\" His stated concerns \u2014 fragmented rails, regulatory change (PSD2, instant payments), resilience under volume, and \"aligning payments modernization with core banking and integration standards\" \u2014 *are* the modernisation thesis. He's the person who owns the architectural shape of the multi-year strategy and whose case underpins the investment ask. For a steering session he's the central voice and represents the payments architecture stream below him.\n\n### Aisha Khan \u2014 Tribe Lead, Payments \u00b7 relevance 8/10\n**Remit + structural, and the deliverability reality of the investment case.** Her remit explicitly aligns the tribe's roadmap \"with the **unified payments platform strategy**\" and regulatory deadlines; her concerns (throughput, resilience, time-to-market, legacy rail dependencies, operational risk of high-volume processing) are exactly what turns a strategy slide into a credible multi-year plan and cost. She's functionally led by Bram, but architecture-strategy vs delivery-feasibility are *genuinely different remits*, so she belongs in her own right \u2014 she's the one who can say what's actually buildable and over what horizon. Slightly below Bram only because a top-of-house steering session leans architecture/strategy over delivery execution; if the session is as much \"can we deliver this and what will it cost\" as \"what should we build\", she's a 9.\n\n### Charlotte Dubois \u2014 Compliance Officer, Architecture \u00b7 relevance 7/10\n**Concern, and a sign-off lens a payments investment case can't skip.** Payments modernisation is regulator-shaped (PSD2, instant payments, audit trails, reconciliation), and her remit is reviewing architecture decisions for regulatory compliance and keeping audit trails and exception handling intact. A multi-year strategy that hasn't been pressure-tested for compliance is an investment case with a hidden liability. She's a different stream from architecture and delivery, so she's additive, not a duplicate. Ask her: which regulatory deadlines (and which way the rules are moving) must the multi-year roadmap be sequenced around.\n\n### Ahmed Benali \u2014 Integration Architect \u00b7 relevance 5/10\n**Concern, but altitude pulls him down for *this* meeting.** Payments modernisation leans heavily on his world \u2014 the event backbone, API-first contracts, killing point-to-point sprawl \u2014 and Bram's own strategy names \"integration standards\" as a dependency. But Ahmed is a hands-on/design-altitude specialist; in a steering session about direction and money he's **represented by Bram**, who carries the integration dependency into the room. Include him only if the strategy genuinely hinges on an integration-platform decision (e.g. committing multi-year to the event backbone) \u2014 then he moves up. Otherwise he's a design-session invite, not a steering one.\n\n---\n\n**Boundary notes**\n\n- **Deliberately left out \u2014 Carlos Mendes (Cloud Architect):** relevant when you're *building* (landing zones, IaC, cost control), but a strategy/steering session on payments direction and investment doesn't turn on cloud build-time choices. Bring him in once the strategy lands and you're sizing the platform build.\n- **Deliberately left out / marginal \u2014 Anika Sharma (Head of Data Architecture):** payments modernisation touches data (reconciliation, data products, lineage), and she's senior enough for a strategy room \u2014 but data architecture is adjacent to *setting payments strategy*, not central to it. Worth a heads-up or a pre-read so the payments data implications are represented; only a seat if the strategy explicitly hinges on a payments-data platform decision.\n- **Represented by their stream:** Maria Oliveira and Jonas Bakker (Aisha's direct reports) and Hannah Schulz (in Bram's functional line) are the working level \u2014 **represented by Aisha and Bram** for a steering session; they're design/delivery altitude, not strategy. Ahmed Benali stands in for the integration team. Surface them directly only if you want makers in the room.\n- **Referenced but not in the wiki (no entry \u2014 unscored, but this is where your steering chair and budget sign-off likely sit):** A steering session for multi-year strategy and an investment case needs the people who hold the mandate and the money, and they appear here only as links:\n  - **Mark van Dijk** \u2014 functional leader of the architects (Bram, Ahmed, Anika, Carlos all dotted-line to him); reads as the head/chief architect who would own and sign off the multi-year architecture strategy. Almost certainly chairs or co-owns this room.\n  - **Miguel Santos** \u2014 line manager of integration/payments architecture (manages Ahmed; functional leader for Bram). Plausible delivery/engineering leadership voice on the investment case.\n  - **Jeroen Meijer** \u2014 Aisha's line manager; the management chain above the payments tribe, i.e. where delivery budget and headcount commitments live.\n  - **Fatima el-Youssef** \u2014 Anika's manager (data leadership) \u2014 relevant only if data sits in the payments strategy scope.\n  - **Daan Verhoeven / Sanne Vermeulen** \u2014 Charlotte's functional and line chain (compliance/governance leadership) \u2014 the level that would give regulatory sign-off on the strategy.\n\n  I can't score these \u2014 there's no entry stating their remit or concerns, so any score would be invented. But for a steering session they're likely the most important attendees of all. **Next step:** add wiki entries for Mark van Dijk (priority \u2014 the probable strategy/sign-off owner) and the relevant management chain, then re-run and I'll place them properly in the ranked room.\n"}], "eval-3-strategy-payments-without_skill": [{"name": "answer.md", "type": "text", "content": "# Steering Session: Payments Platform Modernisation \u2014 Strategy & Investment Case\n\n**Question:** We're holding a steering session to set the multi-year strategy and the investment case for modernising our payments platform. Who should be in the room?\n\nThis is a strategy + investment steering session, not a delivery stand-up. The room needs the people who own the payments architecture and roadmap, the cross-cutting architecture functions the modernisation will depend on (integration, data, cloud), and the compliance/regulatory voice that has to sign off the direction. Below are the relevant people from the available stakeholder profiles.\n\n## Recommended attendees\n\n### Core \u2014 payments ownership (must attend)\n\n**Bram Hendriks \u2014 Domain Architect, Payments**\nOwns payments architecture standards, payment processing patterns, and regulatory/resilience requirements. He is already advocating a unified payments platform, event-driven processing, and strong reconciliation. He is the natural architectural owner of the modernisation direction and should help frame the target state and investment case.\n\n**Aisha Khan \u2014 Tribe Lead, Payments**\nOwns payments delivery, throughput, resilience, and time-to-market for new payment products, and aligns the tribe roadmap with payments architecture and regulatory deadlines. She brings the delivery-capacity, legacy-rail-dependency, and operational-risk realities that the multi-year roadmap and investment case must reflect. Functionally aligned to Bram, so the architecture/delivery view stays joined up.\n\n### Cross-cutting architecture (should attend \u2014 modernisation depends on them)\n\n**Ahmed Benali \u2014 Integration Architect**\nPayments modernisation hinges on integration: API contracts, the event backbone, and replacing brittle batch interfaces. Ahmed governs exactly these. His event-driven and API-first direction aligns with Bram's unified-platform vision, and integration is a major cost/effort driver in the investment case.\n\n**Anika Sharma \u2014 Head of Data Architecture**\nPayments generate high-value data (reconciliation, lineage, reporting, fraud/AML inputs). Anika owns data architecture standards, pipelines, models, and governance. Multi-year strategy and investment should account for data products and platform scalability tied to payments.\n\n**Carlos Mendes \u2014 Cloud Architect**\nA multi-year modernisation almost certainly involves cloud platform choices, landing zones, and cost control \u2014 a core input to the investment case. Carlos governs landing zones, IaC, and well-architected reviews, and brings cost and security-baseline discipline to the numbers.\n\n### Compliance / regulatory (should attend \u2014 sign-off on direction)\n\n**Charlotte Dubois \u2014 Compliance Officer, Architecture**\nPayments is heavily regulated (PSD2, instant payments). Charlotte reviews architecture decisions for regulatory compliance and ensures audit trails and exception handling. Her presence keeps the strategy defensible to regulators and auditors from the outset rather than as an afterthought.\n\n## Notable gaps to fill before/at the session\n\nThe available profiles reference several senior people who are not yet documented but are clearly relevant to a steering session of this seniority. You will likely also want some of these in the room (or represented) as decision-makers and budget owners:\n\n- **Mark van Dijk** \u2014 functional/line leader across multiple architects (incl. Bram); appears to be a senior architecture leader. A multi-year strategy session needs this level of authority.\n- **Miguel Santos** \u2014 functional leader for integration/payments architecture; senior architecture decision-maker.\n- **Jeroen Meijer** \u2014 Aisha's line manager (likely tribe/area lead for payments) \u2014 owns delivery capacity and budget.\n- **Daan Verhoeven** / **Sanne Vermeulen** \u2014 compliance/governance leadership behind Charlotte.\n\nThese individuals do not have stakeholder profiles in the current dataset, so their exact roles are inferred from relationship links. Confirm and add them to the invite as the sponsoring/decision-making layer, since a steering session setting multi-year strategy and an investment case needs an accountable budget owner and senior architecture authority in the room.\n\n## Summary of the room\n\n| Attendee | Role | Why they are in the room |\n|---|---|---|\n| Bram Hendriks | Domain Architect, Payments | Owns payments target architecture and modernisation vision |\n| Aisha Khan | Tribe Lead, Payments | Delivery roadmap, capacity, operational risk, regulatory deadlines |\n| Ahmed Benali | Integration Architect | API/event backbone \u2014 a key modernisation enabler and cost driver |\n| Anika Sharma | Head of Data Architecture | Payments data, lineage, governance, platform scalability |\n| Carlos Mendes | Cloud Architect | Cloud platform choices and cost \u2014 core to the investment case |\n| Charlotte Dubois | Compliance Officer, Architecture | Regulatory/audit sign-off on the strategy |\n| (To confirm) Senior sponsor/budget owner | e.g. Mark van Dijk / Miguel Santos / Jeroen Meijer | Authority and funding decision on a multi-year investment case |\n"}], "eval-4-design-payments-with_skill": [{"name": "answer.md", "type": "text", "content": "# Who should be in the room \u2014 instant-payments processing flow & integration\n\n**Read of the issue:** A hands-on technical design session to work out the instant-payments processing flow and how it integrates with the bank's existing systems. This is a **design / working session** \u2014 the room should be the people who will *make and live with* the technical decision (domain, integration, and payments-delivery makers), not senior leaders. Relevance gets people onto the longlist; altitude decides who actually belongs, so \"Head of\" / functional-leader types are biased down unless the design hinges on their expertise.\n\n**Assumptions I'm making** (I'd normally ask these as check questions, but this run is non-interactive):\n- **Meeting type = design/working session** \u2014 taken directly from \"hands-on technical design session.\" This is the single biggest driver of the roster.\n- **Regulated/customer payment data is in scope** (instant payments inherently carry it), so compliance has a stake \u2014 but at design altitude that's a *consulted* concern, not a seat that drives the agenda.\n- **The integration is with our own internal systems** (core banking, event backbone, APIs), not a one-off external rail, so integration architecture matters more than cloud/landing-zone work at this stage.\n\nIf any of these is wrong \u2014 especially if this is actually a steering/sign-off session rather than working design \u2014 the altitude flips and the leaders below would come *in* rather than being represented.\n\n---\n\n### Bram Hendriks \u2014 Domain Architect, Payments \u00b7 relevance 9/10\n**Remit + concern, dead centre.** He defines payments architecture standards and governs payment-processing patterns, and his stated concerns explicitly name **instant payments**, **resilience under high transaction volumes**, **event-driven processing**, and **aligning payments modernization with core banking and integration standards** \u2014 which is precisely this session. He's the right altitude for a design session: a domain architect doing the technical shaping, not a \"Head of.\" This is the seat the meeting is built around. *Ask him:* the target processing pattern and how it reconciles against core banking.\n\n### Ahmed Benali \u2014 Integration Architect \u00b7 relevance 9/10\n**Remit, dead centre on the \"integrates with our systems\" half.** He designs integration patterns, governs API contracts, and drives the event backbone \u2014 and his concerns (point-to-point sprawl, brittle batch interfaces, event-driven integration, managed API gateway) are exactly the failure modes a real-time payments flow has to avoid. Instant payments is event-driven and latency-sensitive, so the integration design *is* half the problem. Maker altitude, perfect fit. *Ask him:* how the flow rides the event backbone and which API contracts the surrounding systems expose.\n\n### Aisha Khan \u2014 Tribe Lead, Payments \u00b7 relevance 7/10\n**Remit + concern, delivery lens.** She owns payments delivery and worries about **throughput, resilience, time-to-market, legacy rail dependencies, and the operational risk of high-volume processing** \u2014 all of which the processing flow has to survive in production. A tribe lead is at the right working altitude for a design session (she'll have to build and run this), and she represents the hands-on payments engineers under her ([[stakeholder-maria-oliveira]], [[stakeholder-jonas-bakker]]) who have no entries of their own. *Ask her:* what the current rails/legacy dependencies will tolerate and where the delivery risk sits.\n\n### Charlotte Dubois \u2014 Compliance Officer, Architecture \u00b7 relevance 5/10\n**Concern, as a guardrail not a driver.** Instant payments is heavily regulated (PSD2, instant-payments rules, audit trails), and her remit is reviewing architecture decisions for regulatory compliance and keeping audit trails / exception handling intact. In a *design* session she's a consulted voice to keep the flow inside the rails, not someone shaping the technical pattern \u2014 invite her for the compliance-touchpoint part, or capture constraints from her ahead of time rather than holding her in the room throughout. *Ask her:* the must-not-break regulatory and audit constraints on the flow.\n\n---\n\n### Boundary notes\n\n**Deliberately left out**\n- **Carlos Mendes \u2014 Cloud Architect (relevance ~3 for this session).** Real-time payments will eventually need landing-zone, network, and resilience decisions, but his concerns (cost control, cloud sprawl, IaC blueprints) are a *build/deploy-time* layer, not the processing-flow-and-integration design itself. Bring him in once the flow is sketched and infrastructure shaping starts.\n- **Anika Sharma \u2014 Head of Data Architecture (relevance ~3 for this session).** Reconciliation/lineage data will matter, and she'd be relevant if the session pivots to data products or the data model. But she's a \"Head of\" \u2014 too senior for a hands-on design session \u2014 and data isn't the core of *this* flow. Consult if a reconciliation-data design strand opens up; otherwise her standards are represented through Bram's \"strong reconciliation patterns\" remit.\n\n**Represented by their stream**\n- **Payments engineers (e.g. [[stakeholder-maria-oliveira]], [[stakeholder-jonas-bakker]], [[stakeholder-hannah-schulz]])** \u2014 no wiki entries, and at design altitude **Aisha Khan** (their tribe lead) stands in for the payments delivery line. If the design gets deep enough to need a specific implementer's knowledge, pull the relevant named engineer in directly.\n\n**Referenced but not in the wiki** (linked only as `[[wiki-links]]`, no entry \u2014 so not scored; adding their entries would let me place them properly):\n- **[[stakeholder-mark-van-dijk]]** \u2014 functional leader across the architecture discipline (Bram, Ahmed, Carlos, Anika all dotted-line to him). Likely the design-authority / sign-off chain above this session; not needed in the room for working design, but the place escalation goes.\n- **[[stakeholder-miguel-santos]]** \u2014 Ahmed's line manager and Bram's functional leader; sits over the integration/payments-architecture line. Relevant to escalation, not to the working session.\n- **[[stakeholder-jeroen-meijer]]** \u2014 Aisha's line manager (payments delivery chain). Would matter for committing the tribe's time, i.e. a tactical/planning conversation, not this design session.\n- **[[stakeholder-sanne-vermeulen]]** / **[[stakeholder-daan-verhoeven]]** \u2014 Charlotte's line and functional leaders (compliance/governance chain); the sign-off escalation if a regulatory exception arises.\n\nIf any of my assumptions above are off \u2014 particularly the meeting-type call \u2014 tell me and I'll re-size the room (a steering/sign-off framing would pull the \"Head of\" and functional-leader names *into* the list and push the makers down).\n"}], "eval-4-design-payments-without_skill": [{"name": "answer.md", "type": "text", "content": "# Who should be in the room \u2014 Instant-Payments Processing Flow & Systems Integration Design Session\n\nThis is a **hands-on technical design session** focused on (a) the instant-payments processing flow and (b) how it integrates with our systems. The right room is small, technical, and decision-capable, combining payments domain depth, integration design, and the non-functional concerns (resilience, data, cloud) that instant payments stress. Compliance is included because instant payments carry specific regulatory obligations.\n\nBased on the available stakeholder data, the following people should attend.\n\n## Core attendees (must be in the room)\n\n### Bram Hendriks \u2014 Domain Architect, Payments\nOwns payments architecture standards and payment-processing patterns. His explicit concerns are instant payments, fragmented payment rails, resilience under high transaction volumes, event-driven processing, and reconciliation patterns. He is the natural design lead/owner for the instant-payments flow and the person who must ensure it aligns with core banking and integration standards. **Essential.**\n\n### Ahmed Benali \u2014 Integration Architect\nThe session is explicitly about \"how it integrates with our systems.\" Ahmed designs cross-domain integration patterns, governs API contracts, and drives the event backbone \u2014 directly the \"integrates with our systems\" half of the task. He guards against point-to-point sprawl and brittle batch interfaces, both critical for a real-time payments flow. **Essential.**\n\n### Aisha Khan \u2014 Tribe Lead, Payments\nLeads payments delivery and owns throughput, resilience, and time-to-market for payment products, including the operational risk of high-volume processing. She connects the design to what the tribe can actually build and run, and aligns it to regulatory deadlines. Brings delivery and operational reality into a hands-on session. **Essential.**\n\n## Recommended attendees (strong value for this specific topic)\n\n### Anika Sharma \u2014 Head of Data Architecture\nInstant-payments processing produces high-volume event/transaction data that needs lineage, consistent models, and a scalable data platform (for reconciliation, reporting, fraud/AML feeds, and audit). Her input on data products, models, and pipeline design matters for the processing flow and downstream integration. Recommended.\n\n### Carlos Mendes \u2014 Cloud Architect\nInstant payments demand high availability, low latency, and scalable, resilient infrastructure. Carlos governs landing zones, network/security baselines, and well-architected reviews \u2014 directly relevant to where and how the real-time flow runs. Recommended, especially if any new services or scaling are in scope.\n\n### Charlotte Dubois \u2014 Compliance Officer, Architecture\nInstant payments are subject to regulatory requirements (e.g. PSD2, instant-payments regulation) that Bram already flags as a domain concern. Charlotte ensures the design keeps audit trails, handles exceptions, and stays within approved standards. For a hands-on design session she can attend part-time or review the output, but should be looped in to avoid late-stage compliance rework. Recommended.\n\n## Optional / consult as needed\nNone of the remaining available stakeholders are a direct fit for a hands-on payments-flow design session, though several referenced people (e.g. Maria Oliveira and Jonas Bakker, who report into the payments tribe/domain) may be relevant as hands-on engineers if their full profiles are available.\n\n## Summary table\n\n| Person | Role | Why in the room | Priority |\n|---|---|---|---|\n| Bram Hendriks | Domain Architect \u2014 Payments | Owns payments architecture & instant-payments patterns; design lead | Core |\n| Ahmed Benali | Integration Architect | Owns API contracts & event backbone \u2014 the integration half | Core |\n| Aisha Khan | Tribe Lead \u2014 Payments | Delivery, throughput, resilience, operational reality | Core |\n| Anika Sharma | Head of Data Architecture | Transaction/event data, lineage, reconciliation & reporting feeds | Recommended |\n| Carlos Mendes | Cloud Architect | Resilience, latency, scaling of the real-time platform | Recommended |\n| Charlotte Dubois | Compliance Officer \u2014 Architecture | Regulatory obligations, audit trails for instant payments | Recommended (part-time) |\n\n## Notes\n- Only six stakeholder profiles were available in the data. Several people referenced in relationships (e.g. payments engineers Maria Oliveira and Jonas Bakker, core-banking and security/risk roles) do not have profiles present; if available, hands-on payments engineers and a core-banking representative would strengthen an integration-focused technical session.\n"}]}, "benchmark": {"metadata": {"skill_name": "stakeholder-finder", "skill_path": "<path/to/skill>", "executor_model": "<model-name>", "analyzer_model": "<model-name>", "timestamp": "2026-06-25T09:34:03Z", "evals_run": [3, 5], "runs_per_configuration": 3}, "runs": [{"eval_id": 3, "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 1.0, "passed": 7, "failed": 0, "total": 7, "time_seconds": 80.3, "tokens": 28270, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "States the meeting type AND which room-breadth mode it used (tight vs inclusive)", "passed": true, "evidence": "States strategic/steering + inclusive mode."}, {"text": "Selects INCLUSIVE mode and justifies it from the 'investment case' / deliverability framing", "passed": true, "evidence": "Explicitly kept a feasibility voice because of investment-case framing; noted one-line switch to tight."}, {"text": "Surfaces Bram Hendriks as the senior payments-architecture voice (top of the line)", "passed": true, "evidence": "Bram 9, top."}, {"text": "Keeps Aisha Khan as a delivery-feasibility voice, ranked below Bram, NOT collapsed (correct under inclusive mode)", "passed": true, "evidence": "Aisha 7, delivery/cost feasibility."}, {"text": "Collapses the engineer level (e.g. Maria Oliveira / Jonas Bakker) to a 'represented by' note", "passed": true, "evidence": "Collapsed tribe members into their leads."}, {"text": "Flags the unprofiled senior/escalation chain (Mark van Dijk / Jeroen Meijer / Miguel Santos) in the gap note", "passed": true, "evidence": "Sponsors unscored wiki-links; Mark/Jeroen called out."}, {"text": "Every ranked stakeholder has a 1-10 score and rationale, ordered; no fabricated people in the ranked list", "passed": true, "evidence": "9,7,6,6,6; chain unscored."}], "notes": []}, {"eval_id": 5, "configuration": "with_skill", "run_number": 1, "result": {"pass_rate": 1.0, "passed": 7, "failed": 0, "total": 7, "time_seconds": 65.3, "tokens": 26725, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "States the meeting type AND which room-breadth mode it used (tight vs inclusive)", "passed": true, "evidence": "States strategic/steering + 'tight (leadership-only)'."}, {"text": "Selects TIGHT (leadership-only) mode and justifies it from the direction-only / no-deliverability framing", "passed": true, "evidence": "Cited 'not a delivery or costing exercise' as making tight the default."}, {"text": "Surfaces Bram Hendriks as the single payments-line voice in the ranked list", "passed": true, "evidence": "Bram 8, represents the payments line."}, {"text": "Aisha Khan (Tribe Lead) is collapsed to a 'represented by Bram' note, NOT ranked at top altitude", "passed": true, "evidence": "Aisha omitted from tight room, 'Bram represents the payments line'."}, {"text": "Ranked list has one voice per payments stream (no domain-architect + tribe-lead stacking)", "passed": true, "evidence": "Only Bram from payments line in ranking."}, {"text": "Flags the unprofiled senior/escalation chain (Mark van Dijk / Jeroen Meijer / Miguel Santos) in the gap note as the likely chair/sign-off", "passed": true, "evidence": "All three in gap note as budget/mandate holders."}, {"text": "Every ranked stakeholder has a 1-10 score and rationale, ordered; no fabricated people in the ranked list", "passed": true, "evidence": "Bram 8, Charlotte 6, Ahmed 5; chain unscored."}], "notes": []}, {"eval_id": 3, "configuration": "without_skill", "run_number": 1, "result": {"pass_rate": 0.2857142857142857, "passed": 2, "failed": 5, "total": 7, "time_seconds": 44.8, "tokens": 19945, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "States the meeting type AND which room-breadth mode it used (tight vs inclusive)", "passed": false, "evidence": "No mode concept."}, {"text": "Selects INCLUSIVE mode and justifies it from the 'investment case' / deliverability framing", "passed": false, "evidence": "No mode reasoning."}, {"text": "Surfaces Bram Hendriks as the senior payments-architecture voice (top of the line)", "passed": true, "evidence": "Listed as core."}, {"text": "Keeps Aisha Khan as a delivery-feasibility voice, ranked below Bram, NOT collapsed (correct under inclusive mode)", "passed": false, "evidence": "Listed flat, no ranking/feasibility framing."}, {"text": "Collapses the engineer level (e.g. Maria Oliveira / Jonas Bakker) to a 'represented by' note", "passed": false, "evidence": "No collapse."}, {"text": "Flags the unprofiled senior/escalation chain (Mark van Dijk / Jeroen Meijer / Miguel Santos) in the gap note", "passed": true, "evidence": "Sponsors flagged."}, {"text": "Every ranked stakeholder has a 1-10 score and rationale, ordered; no fabricated people in the ranked list", "passed": false, "evidence": "No scores."}], "notes": []}, {"eval_id": 5, "configuration": "without_skill", "run_number": 1, "result": {"pass_rate": 0.0, "passed": 0, "failed": 7, "total": 7, "time_seconds": 48.0, "tokens": 19834, "tool_calls": 0, "errors": 0}, "expectations": [{"text": "States the meeting type AND which room-breadth mode it used (tight vs inclusive)", "passed": false, "evidence": "No mode."}, {"text": "Selects TIGHT (leadership-only) mode and justifies it from the direction-only / no-deliverability framing", "passed": false, "evidence": "No mode reasoning."}, {"text": "Surfaces Bram Hendriks as the single payments-line voice in the ranked list", "passed": false, "evidence": "Stacks Aisha + Bram."}, {"text": "Aisha Khan (Tribe Lead) is collapsed to a 'represented by Bram' note, NOT ranked at top altitude", "passed": false, "evidence": "Aisha in core room."}, {"text": "Ranked list has one voice per payments stream (no domain-architect + tribe-lead stacking)", "passed": false, "evidence": "Stacked."}, {"text": "Flags the unprofiled senior/escalation chain (Mark van Dijk / Jeroen Meijer / Miguel Santos) in the gap note as the likely chair/sign-off", "passed": false, "evidence": "Put Mark van Dijk/Jeroen IN the core room, not a gap note."}, {"text": "Every ranked stakeholder has a 1-10 score and rationale, ordered; no fabricated people in the ranked list", "passed": false, "evidence": "No scores; unprofiled people in the room."}], "notes": []}], "run_summary": {"with_skill": {"pass_rate": {"mean": 1.0, "stddev": 0.0, "min": 1.0, "max": 1.0}, "time_seconds": {"mean": 72.8, "stddev": 10.6066, "min": 65.3, "max": 80.3}, "tokens": {"mean": 27497.5, "stddev": 1092.48, "min": 26725, "max": 28270}}, "without_skill": {"pass_rate": {"mean": 0.1429, "stddev": 0.202, "min": 0.0, "max": 0.2857}, "time_seconds": {"mean": 46.4, "stddev": 2.2627, "min": 44.8, "max": 48.0}, "tokens": {"mean": 19889.5, "stddev": 78.4889, "min": 19834, "max": 19945}}, "delta": {"pass_rate": "+0.86", "time_seconds": "+26.4", "tokens": "+7608"}}, "notes": []}};
+
+    // ---- State ----
+    let feedbackMap = {};  // run_id -> feedback text
+    let currentIndex = 0;
+    let visitedRuns = new Set();
+
+    // ---- Init ----
+    async function init() {
+      // Load saved feedback from server — but only if this isn't a fresh
+      // iteration (indicated by previous_feedback being present). When
+      // previous feedback exists, the feedback.json on disk is stale from
+      // the prior iteration and should not pre-fill the textareas.
+      const hasPrevious = Object.keys(EMBEDDED_DATA.previous_feedback || {}).length > 0
+        || Object.keys(EMBEDDED_DATA.previous_outputs || {}).length > 0;
+      if (!hasPrevious) {
+        try {
+          const resp = await fetch("/api/feedback");
+          const data = await resp.json();
+          if (data.reviews) {
+            for (const r of data.reviews) feedbackMap[r.run_id] = r.feedback;
+          }
+        } catch { /* first run, no feedback yet */ }
+      }
+
+      document.getElementById("skill-name").textContent = EMBEDDED_DATA.skill_name;
+      showRun(0);
+
+      // Wire up feedback auto-save
+      const textarea = document.getElementById("feedback");
+      let saveTimeout = null;
+      textarea.addEventListener("input", () => {
+        clearTimeout(saveTimeout);
+        document.getElementById("feedback-status").textContent = "";
+        saveTimeout = setTimeout(() => saveCurrentFeedback(), 800);
+      });
+    }
+
+    // ---- Navigation ----
+    function navigate(delta) {
+      const newIndex = currentIndex + delta;
+      if (newIndex >= 0 && newIndex < EMBEDDED_DATA.runs.length) {
+        saveCurrentFeedback();
+        showRun(newIndex);
+      }
+    }
+
+    function updateNavButtons() {
+      document.getElementById("prev-btn").disabled = currentIndex === 0;
+      document.getElementById("next-btn").disabled =
+        currentIndex === EMBEDDED_DATA.runs.length - 1;
+    }
+
+    // ---- Show a run ----
+    function showRun(index) {
+      currentIndex = index;
+      const run = EMBEDDED_DATA.runs[index];
+
+      // Progress
+      document.getElementById("progress").textContent =
+        `${index + 1} of ${EMBEDDED_DATA.runs.length}`;
+
+      // Prompt
+      document.getElementById("prompt-text").textContent = run.prompt;
+
+      // Config badge
+      const badge = document.getElementById("config-badge");
+      const configMatch = run.id.match(/(with_skill|without_skill|new_skill|old_skill)/);
+      if (configMatch) {
+        const config = configMatch[1];
+        const isBaseline = config === "without_skill" || config === "old_skill";
+        badge.textContent = config.replace(/_/g, " ");
+        badge.className = "config-badge " + (isBaseline ? "config-baseline" : "config-primary");
+        badge.style.display = "inline-block";
+      } else {
+        badge.style.display = "none";
+      }
+
+      // Outputs
+      renderOutputs(run);
+
+      // Previous outputs
+      renderPrevOutputs(run);
+
+      // Grades
+      renderGrades(run);
+
+      // Previous feedback
+      const prevFb = (EMBEDDED_DATA.previous_feedback || {})[run.id];
+      const prevEl = document.getElementById("prev-feedback");
+      if (prevFb) {
+        document.getElementById("prev-feedback-text").textContent = prevFb;
+        prevEl.style.display = "block";
+      } else {
+        prevEl.style.display = "none";
+      }
+
+      // Feedback
+      document.getElementById("feedback").value = feedbackMap[run.id] || "";
+      document.getElementById("feedback-status").textContent = "";
+
+      updateNavButtons();
+
+      // Track visited runs and promote done button when all visited
+      visitedRuns.add(index);
+      const doneBtn = document.getElementById("done-btn");
+      if (visitedRuns.size >= EMBEDDED_DATA.runs.length) {
+        doneBtn.classList.add("ready");
+      }
+
+      // Scroll main content to top
+      document.querySelector(".main").scrollTop = 0;
+    }
+
+    // ---- Render outputs ----
+    function renderOutputs(run) {
+      const container = document.getElementById("outputs-body");
+      container.innerHTML = "";
+
+      const outputs = run.outputs || [];
+      if (outputs.length === 0) {
+        container.innerHTML = '<div class="empty-state">No output files</div>';
+        return;
+      }
+
+      for (const file of outputs) {
+        const fileDiv = document.createElement("div");
+        fileDiv.className = "output-file";
+
+        // Always show file header with download link
+        const header = document.createElement("div");
+        header.className = "output-file-header";
+        const nameSpan = document.createElement("span");
+        nameSpan.textContent = file.name;
+        header.appendChild(nameSpan);
+        const dlBtn = document.createElement("a");
+        dlBtn.className = "dl-btn";
+        dlBtn.textContent = "Download";
+        dlBtn.download = file.name;
+        dlBtn.href = getDownloadUri(file);
+        header.appendChild(dlBtn);
+        fileDiv.appendChild(header);
+
+        const content = document.createElement("div");
+        content.className = "output-file-content";
+
+        if (file.type === "text") {
+          const pre = document.createElement("pre");
+          pre.textContent = file.content;
+          content.appendChild(pre);
+        } else if (file.type === "image") {
+          const img = document.createElement("img");
+          img.src = file.data_uri;
+          img.alt = file.name;
+          content.appendChild(img);
+        } else if (file.type === "pdf") {
+          const iframe = document.createElement("iframe");
+          iframe.src = file.data_uri;
+          content.appendChild(iframe);
+        } else if (file.type === "xlsx") {
+          renderXlsx(content, file.data_b64);
+        } else if (file.type === "binary") {
+          const a = document.createElement("a");
+          a.className = "download-link";
+          a.href = file.data_uri;
+          a.download = file.name;
+          a.textContent = "Download " + file.name;
+          content.appendChild(a);
+        } else if (file.type === "error") {
+          const pre = document.createElement("pre");
+          pre.textContent = file.content;
+          pre.style.color = "var(--red)";
+          content.appendChild(pre);
+        }
+
+        fileDiv.appendChild(content);
+        container.appendChild(fileDiv);
+      }
+    }
+
+    // ---- XLSX rendering via SheetJS ----
+    function renderXlsx(container, b64Data) {
+      try {
+        const raw = Uint8Array.from(atob(b64Data), c => c.charCodeAt(0));
+        const wb = XLSX.read(raw, { type: "array" });
+
+        for (let i = 0; i < wb.SheetNames.length; i++) {
+          const sheetName = wb.SheetNames[i];
+          const ws = wb.Sheets[sheetName];
+
+          if (wb.SheetNames.length > 1) {
+            const sheetLabel = document.createElement("div");
+            sheetLabel.style.cssText =
+              "font-weight:600; font-size:0.8rem; color:#b0aea5; margin-top:0.5rem; margin-bottom:0.25rem;";
+            sheetLabel.textContent = "Sheet: " + sheetName;
+            container.appendChild(sheetLabel);
+          }
+
+          const htmlStr = XLSX.utils.sheet_to_html(ws, { editable: false });
+          const wrapper = document.createElement("div");
+          wrapper.innerHTML = htmlStr;
+          container.appendChild(wrapper);
+        }
+      } catch (err) {
+        container.textContent = "Error rendering spreadsheet: " + err.message;
+      }
+    }
+
+    // ---- Grades ----
+    function renderGrades(run) {
+      const section = document.getElementById("grades-section");
+      const content = document.getElementById("grades-content");
+
+      if (!run.grading) {
+        section.style.display = "none";
+        return;
+      }
+
+      const grading = run.grading;
+      section.style.display = "block";
+      // Reset to collapsed
+      content.classList.remove("open");
+      document.getElementById("grades-arrow").classList.remove("open");
+
+      const summary = grading.summary || {};
+      const expectations = grading.expectations || [];
+
+      let html = '<div style="padding: 1rem;">';
+
+      // Summary line
+      const passRate = summary.pass_rate != null
+        ? Math.round(summary.pass_rate * 100) + "%"
+        : "?";
+      const badgeClass = summary.pass_rate >= 0.8 ? "grade-pass" : summary.pass_rate >= 0.5 ? "" : "grade-fail";
+      html += '<div class="grades-summary">';
+      html += '<span class="grade-badge ' + badgeClass + '">' + passRate + '</span>';
+      html += '<span>' + (summary.passed || 0) + ' passed, ' + (summary.failed || 0) + ' failed of ' + (summary.total || 0) + '</span>';
+      html += '</div>';
+
+      // Assertions list
+      html += '<ul class="assertion-list">';
+      for (const exp of expectations) {
+        const statusClass = exp.passed ? "pass" : "fail";
+        const statusIcon = exp.passed ? "\u2713" : "\u2717";
+        html += '<li class="assertion-item">';
+        html += '<span class="assertion-status ' + statusClass + '">' + statusIcon + '</span>';
+        html += '<span>' + escapeHtml(exp.text) + '</span>';
+        if (exp.evidence) {
+          html += '<div class="assertion-evidence">' + escapeHtml(exp.evidence) + '</div>';
+        }
+        html += '</li>';
+      }
+      html += '</ul>';
+
+      html += '</div>';
+      content.innerHTML = html;
+    }
+
+    function toggleGrades() {
+      const content = document.getElementById("grades-content");
+      const arrow = document.getElementById("grades-arrow");
+      content.classList.toggle("open");
+      arrow.classList.toggle("open");
+    }
+
+    // ---- Previous outputs (collapsible) ----
+    function renderPrevOutputs(run) {
+      const section = document.getElementById("prev-outputs-section");
+      const content = document.getElementById("prev-outputs-content");
+      const prevOutputs = (EMBEDDED_DATA.previous_outputs || {})[run.id];
+
+      if (!prevOutputs || prevOutputs.length === 0) {
+        section.style.display = "none";
+        return;
+      }
+
+      section.style.display = "block";
+      // Reset to collapsed
+      content.classList.remove("open");
+      document.getElementById("prev-outputs-arrow").classList.remove("open");
+
+      // Render the files into the content area
+      content.innerHTML = "";
+      const wrapper = document.createElement("div");
+      wrapper.style.padding = "1rem";
+
+      for (const file of prevOutputs) {
+        const fileDiv = document.createElement("div");
+        fileDiv.className = "output-file";
+
+        const header = document.createElement("div");
+        header.className = "output-file-header";
+        const nameSpan = document.createElement("span");
+        nameSpan.textContent = file.name;
+        header.appendChild(nameSpan);
+        const dlBtn = document.createElement("a");
+        dlBtn.className = "dl-btn";
+        dlBtn.textContent = "Download";
+        dlBtn.download = file.name;
+        dlBtn.href = getDownloadUri(file);
+        header.appendChild(dlBtn);
+        fileDiv.appendChild(header);
+
+        const fc = document.createElement("div");
+        fc.className = "output-file-content";
+
+        if (file.type === "text") {
+          const pre = document.createElement("pre");
+          pre.textContent = file.content;
+          fc.appendChild(pre);
+        } else if (file.type === "image") {
+          const img = document.createElement("img");
+          img.src = file.data_uri;
+          img.alt = file.name;
+          fc.appendChild(img);
+        } else if (file.type === "pdf") {
+          const iframe = document.createElement("iframe");
+          iframe.src = file.data_uri;
+          fc.appendChild(iframe);
+        } else if (file.type === "xlsx") {
+          renderXlsx(fc, file.data_b64);
+        } else if (file.type === "binary") {
+          const a = document.createElement("a");
+          a.className = "download-link";
+          a.href = file.data_uri;
+          a.download = file.name;
+          a.textContent = "Download " + file.name;
+          fc.appendChild(a);
+        }
+
+        fileDiv.appendChild(fc);
+        wrapper.appendChild(fileDiv);
+      }
+
+      content.appendChild(wrapper);
+    }
+
+    function togglePrevOutputs() {
+      const content = document.getElementById("prev-outputs-content");
+      const arrow = document.getElementById("prev-outputs-arrow");
+      content.classList.toggle("open");
+      arrow.classList.toggle("open");
+    }
+
+    // ---- Feedback (saved to server -> feedback.json) ----
+    function saveCurrentFeedback() {
+      const run = EMBEDDED_DATA.runs[currentIndex];
+      const text = document.getElementById("feedback").value;
+
+      if (text.trim() === "") {
+        delete feedbackMap[run.id];
+      } else {
+        feedbackMap[run.id] = text;
+      }
+
+      // Build reviews array from map
+      const reviews = [];
+      for (const [run_id, feedback] of Object.entries(feedbackMap)) {
+        if (feedback.trim()) {
+          reviews.push({ run_id, feedback, timestamp: new Date().toISOString() });
+        }
+      }
+
+      fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reviews, status: "in_progress" }),
+      }).then(() => {
+        document.getElementById("feedback-status").textContent = "Saved";
+      }).catch(() => {
+        // Static mode or server unavailable — no-op on auto-save,
+        // feedback will be downloaded on final submit
+        document.getElementById("feedback-status").textContent = "Will download on submit";
+      });
+    }
+
+    // ---- Done ----
+    function showDoneDialog() {
+      // Save current textarea to feedbackMap (but don't POST yet)
+      const run = EMBEDDED_DATA.runs[currentIndex];
+      const text = document.getElementById("feedback").value;
+      if (text.trim() === "") {
+        delete feedbackMap[run.id];
+      } else {
+        feedbackMap[run.id] = text;
+      }
+
+      // POST once with status: complete — include ALL runs so the model
+      // can distinguish "no feedback" (looks good) from "not reviewed"
+      const reviews = [];
+      const ts = new Date().toISOString();
+      for (const r of EMBEDDED_DATA.runs) {
+        reviews.push({ run_id: r.id, feedback: feedbackMap[r.id] || "", timestamp: ts });
+      }
+      const payload = JSON.stringify({ reviews, status: "complete" }, null, 2);
+      fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: payload,
+      }).then(() => {
+        document.getElementById("done-overlay").classList.add("visible");
+      }).catch(() => {
+        // Server not available (static mode) — download as file
+        const blob = new Blob([payload], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "feedback.json";
+        a.click();
+        URL.revokeObjectURL(url);
+        document.getElementById("done-overlay").classList.add("visible");
+      });
+    }
+
+    function closeDoneDialog() {
+      // Reset status back to in_progress
+      saveCurrentFeedback();
+      document.getElementById("done-overlay").classList.remove("visible");
+    }
+
+    // ---- Toast ----
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("visible");
+      setTimeout(() => toast.classList.remove("visible"), 2000);
+    }
+
+    // ---- Keyboard nav ----
+    document.addEventListener("keydown", (e) => {
+      // Don't capture when typing in textarea
+      if (e.target.tagName === "TEXTAREA") return;
+
+      if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+        e.preventDefault();
+        navigate(-1);
+      } else if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+        e.preventDefault();
+        navigate(1);
+      }
+    });
+
+    // ---- Util ----
+    function getDownloadUri(file) {
+      if (file.data_uri) return file.data_uri;
+      if (file.data_b64) return "data:application/octet-stream;base64," + file.data_b64;
+      if (file.type === "text") return "data:text/plain;charset=utf-8," + encodeURIComponent(file.content);
+      return "#";
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement("div");
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // ---- View switching ----
+    function switchView(view) {
+      document.querySelectorAll(".view-tab").forEach(t => t.classList.remove("active"));
+      document.querySelectorAll(".view-panel").forEach(p => p.classList.remove("active"));
+      document.querySelector(`[onclick="switchView('${view}')"]`).classList.add("active");
+      document.getElementById("panel-" + view).classList.add("active");
+    }
+
+    // ---- Benchmark rendering ----
+    function renderBenchmark() {
+      const data = EMBEDDED_DATA.benchmark;
+      if (!data) return;
+
+      // Show the tabs
+      document.getElementById("view-tabs").style.display = "flex";
+
+      const container = document.getElementById("benchmark-content");
+      const summary = data.run_summary || {};
+      const metadata = data.metadata || {};
+      const notes = data.notes || [];
+
+      let html = "";
+
+      // Header
+      html += "<h2 style='font-family: Poppins, sans-serif; margin-bottom: 0.5rem;'>Benchmark Results</h2>";
+      html += "<p style='color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1.25rem;'>";
+      if (metadata.skill_name) html += "<strong>" + escapeHtml(metadata.skill_name) + "</strong> &mdash; ";
+      if (metadata.timestamp) html += metadata.timestamp + " &mdash; ";
+      if (metadata.evals_run) html += "Evals: " + metadata.evals_run.join(", ") + " &mdash; ";
+      html += (metadata.runs_per_configuration || "?") + " runs per configuration";
+      html += "</p>";
+
+      // Summary table
+      html += '<table class="benchmark-table">';
+
+      function fmtStat(stat, pct) {
+        if (!stat) return "—";
+        const suffix = pct ? "%" : "";
+        const m = pct ? (stat.mean * 100).toFixed(0) : stat.mean.toFixed(1);
+        const s = pct ? (stat.stddev * 100).toFixed(0) : stat.stddev.toFixed(1);
+        return m + suffix + " ± " + s + suffix;
+      }
+
+      function deltaClass(val) {
+        if (!val) return "";
+        const n = parseFloat(val);
+        if (n > 0) return "benchmark-delta-positive";
+        if (n < 0) return "benchmark-delta-negative";
+        return "";
+      }
+
+      // Discover config names dynamically (everything except "delta")
+      const configs = Object.keys(summary).filter(k => k !== "delta");
+      const configA = configs[0] || "config_a";
+      const configB = configs[1] || "config_b";
+      const labelA = configA.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+      const labelB = configB.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+      const a = summary[configA] || {};
+      const b = summary[configB] || {};
+      const delta = summary.delta || {};
+
+      html += "<thead><tr><th>Metric</th><th>" + escapeHtml(labelA) + "</th><th>" + escapeHtml(labelB) + "</th><th>Delta</th></tr></thead>";
+      html += "<tbody>";
+
+      html += "<tr><td><strong>Pass Rate</strong></td>";
+      html += "<td>" + fmtStat(a.pass_rate, true) + "</td>";
+      html += "<td>" + fmtStat(b.pass_rate, true) + "</td>";
+      html += '<td class="' + deltaClass(delta.pass_rate) + '">' + (delta.pass_rate || "—") + "</td></tr>";
+
+      // Time (only show row if data exists)
+      if (a.time_seconds || b.time_seconds) {
+        html += "<tr><td><strong>Time (s)</strong></td>";
+        html += "<td>" + fmtStat(a.time_seconds, false) + "</td>";
+        html += "<td>" + fmtStat(b.time_seconds, false) + "</td>";
+        html += '<td class="' + deltaClass(delta.time_seconds) + '">' + (delta.time_seconds ? delta.time_seconds + "s" : "—") + "</td></tr>";
+      }
+
+      // Tokens (only show row if data exists)
+      if (a.tokens || b.tokens) {
+        html += "<tr><td><strong>Tokens</strong></td>";
+        html += "<td>" + fmtStat(a.tokens, false) + "</td>";
+        html += "<td>" + fmtStat(b.tokens, false) + "</td>";
+        html += '<td class="' + deltaClass(delta.tokens) + '">' + (delta.tokens || "—") + "</td></tr>";
+      }
+
+      html += "</tbody></table>";
+
+      // Per-eval breakdown (if runs data available)
+      const runs = data.runs || [];
+      if (runs.length > 0) {
+        const evalIds = [...new Set(runs.map(r => r.eval_id))].sort((a, b) => a - b);
+
+        html += "<h3 style='font-family: Poppins, sans-serif; margin-bottom: 0.75rem;'>Per-Eval Breakdown</h3>";
+
+        const hasTime = runs.some(r => r.result && r.result.time_seconds != null);
+        const hasErrors = runs.some(r => r.result && r.result.errors > 0);
+
+        for (const evalId of evalIds) {
+          const evalRuns = runs.filter(r => r.eval_id === evalId);
+          const evalName = evalRuns[0] && evalRuns[0].eval_name ? evalRuns[0].eval_name : "Eval " + evalId;
+
+          html += "<h4 style='font-family: Poppins, sans-serif; margin: 1rem 0 0.5rem; color: var(--text);'>" + escapeHtml(evalName) + "</h4>";
+          html += '<table class="benchmark-table">';
+          html += "<thead><tr><th>Config</th><th>Run</th><th>Pass Rate</th>";
+          if (hasTime) html += "<th>Time (s)</th>";
+          if (hasErrors) html += "<th>Crashes During Execution</th>";
+          html += "</tr></thead>";
+          html += "<tbody>";
+
+          // Group by config and render with average rows
+          const configGroups = [...new Set(evalRuns.map(r => r.configuration))];
+          for (let ci = 0; ci < configGroups.length; ci++) {
+            const config = configGroups[ci];
+            const configRuns = evalRuns.filter(r => r.configuration === config);
+            if (configRuns.length === 0) continue;
+
+            const rowClass = ci === 0 ? "benchmark-row-with" : "benchmark-row-without";
+            const configLabel = config.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+
+            for (const run of configRuns) {
+              const r = run.result || {};
+              const prClass = r.pass_rate >= 0.8 ? "benchmark-delta-positive" : r.pass_rate < 0.5 ? "benchmark-delta-negative" : "";
+              html += '<tr class="' + rowClass + '">';
+              html += "<td>" + configLabel + "</td>";
+              html += "<td>" + run.run_number + "</td>";
+              html += '<td class="' + prClass + '">' + ((r.pass_rate || 0) * 100).toFixed(0) + "% (" + (r.passed || 0) + "/" + (r.total || 0) + ")</td>";
+              if (hasTime) html += "<td>" + (r.time_seconds != null ? r.time_seconds.toFixed(1) : "—") + "</td>";
+              if (hasErrors) html += "<td>" + (r.errors || 0) + "</td>";
+              html += "</tr>";
+            }
+
+            // Average row
+            const rates = configRuns.map(r => (r.result || {}).pass_rate || 0);
+            const avgRate = rates.reduce((a, b) => a + b, 0) / rates.length;
+            const avgPrClass = avgRate >= 0.8 ? "benchmark-delta-positive" : avgRate < 0.5 ? "benchmark-delta-negative" : "";
+            html += '<tr class="benchmark-row-avg ' + rowClass + '">';
+            html += "<td>" + configLabel + "</td>";
+            html += "<td>Avg</td>";
+            html += '<td class="' + avgPrClass + '">' + (avgRate * 100).toFixed(0) + "%</td>";
+            if (hasTime) {
+              const times = configRuns.map(r => (r.result || {}).time_seconds).filter(t => t != null);
+              html += "<td>" + (times.length ? (times.reduce((a, b) => a + b, 0) / times.length).toFixed(1) : "—") + "</td>";
+            }
+            if (hasErrors) html += "<td></td>";
+            html += "</tr>";
+          }
+          html += "</tbody></table>";
+
+          // Per-assertion detail for this eval
+          const runsWithExpectations = {};
+          for (const config of configGroups) {
+            runsWithExpectations[config] = evalRuns.filter(r => r.configuration === config && r.expectations && r.expectations.length > 0);
+          }
+          const hasAnyExpectations = Object.values(runsWithExpectations).some(runs => runs.length > 0);
+          if (hasAnyExpectations) {
+            // Collect all unique assertion texts across all configs
+            const allAssertions = [];
+            const seen = new Set();
+            for (const config of configGroups) {
+              for (const run of runsWithExpectations[config]) {
+                for (const exp of (run.expectations || [])) {
+                  if (!seen.has(exp.text)) {
+                    seen.add(exp.text);
+                    allAssertions.push(exp.text);
+                  }
+                }
+              }
+            }
+
+            html += '<table class="benchmark-table" style="margin-top: 0.5rem;">';
+            html += "<thead><tr><th>Assertion</th>";
+            for (const config of configGroups) {
+              const label = config.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+              html += "<th>" + escapeHtml(label) + "</th>";
+            }
+            html += "</tr></thead><tbody>";
+
+            for (const assertionText of allAssertions) {
+              html += "<tr><td>" + escapeHtml(assertionText) + "</td>";
+
+              for (const config of configGroups) {
+                html += "<td>";
+                for (const run of runsWithExpectations[config]) {
+                  const exp = (run.expectations || []).find(e => e.text === assertionText);
+                  if (exp) {
+                    const cls = exp.passed ? "benchmark-delta-positive" : "benchmark-delta-negative";
+                    const icon = exp.passed ? "\u2713" : "\u2717";
+                    html += '<span class="' + cls + '" title="Run ' + run.run_number + ': ' + escapeHtml(exp.evidence || "") + '">' + icon + "</span> ";
+                  } else {
+                    html += "— ";
+                  }
+                }
+                html += "</td>";
+              }
+              html += "</tr>";
+            }
+            html += "</tbody></table>";
+          }
+        }
+      }
+
+      // Notes
+      if (notes.length > 0) {
+        html += '<div class="benchmark-notes">';
+        html += "<h3>Analysis Notes</h3>";
+        html += "<ul>";
+        for (const note of notes) {
+          html += "<li>" + escapeHtml(note) + "</li>";
+        }
+        html += "</ul></div>";
+      }
+
+      container.innerHTML = html;
+    }
+
+    // ---- Start ----
+    init();
+    renderBenchmark();
+  </script>
+</body>
+</html>

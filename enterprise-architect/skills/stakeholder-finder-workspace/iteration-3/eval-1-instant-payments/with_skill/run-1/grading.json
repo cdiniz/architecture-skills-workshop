@@ -1,0 +1,50 @@
+{
+  "expectations": [
+    {
+      "text": "Includes Bram Hendriks (Domain Architect \u2014 Payments)",
+      "passed": true,
+      "evidence": "10/10."
+    },
+    {
+      "text": "Includes Aisha Khan (Tribe Lead \u2014 Payments)",
+      "passed": true,
+      "evidence": "6/10."
+    },
+    {
+      "text": "Includes Charlotte Dubois (Compliance) for PSD2",
+      "passed": true,
+      "evidence": "8/10."
+    },
+    {
+      "text": "Bram Hendriks and/or Aisha Khan scored highest (8-10)",
+      "passed": true,
+      "evidence": "Bram 10."
+    },
+    {
+      "text": "Every listed stakeholder has a relevancy score from 1 to 10",
+      "passed": true,
+      "evidence": "Yes."
+    },
+    {
+      "text": "Every listed stakeholder has a written rationale naming the relevance axis",
+      "passed": true,
+      "evidence": "Yes."
+    },
+    {
+      "text": "Stakeholders are ordered by relevancy score, highest first",
+      "passed": true,
+      "evidence": "10,8,7,6."
+    },
+    {
+      "text": "No fabricated people outside the six synthetic-data entries",
+      "passed": true,
+      "evidence": "Chain in gap note."
+    }
+  ],
+  "summary": {
+    "pass_rate": 1.0,
+    "passed": 8,
+    "failed": 0,
+    "total": 8
+  }
+}

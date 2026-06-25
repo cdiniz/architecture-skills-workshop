@@ -1,0 +1,14 @@
+{
+  "eval_id": 3,
+  "eval_name": "strategy-payments-investment-case (INCLUSIVE expected)",
+  "prompt": "We're holding a steering session to set the multi-year strategy and the investment case for modernising our payments platform. Who should be in the room?",
+  "assertions": [
+    {"text": "States the meeting type AND which room-breadth mode it used (tight vs inclusive)", "rationale": "Toggle must be made visible."},
+    {"text": "Selects INCLUSIVE mode and justifies it from the 'investment case' / deliverability framing", "rationale": "'Investment case' is the signal that should select inclusive."},
+    {"text": "Surfaces Bram Hendriks as the senior payments-architecture voice (top of the line)", "rationale": "Senior architecture voice leads a strategy room."},
+    {"text": "Keeps Aisha Khan as a delivery-feasibility voice, ranked below Bram, NOT collapsed (correct under inclusive mode)", "rationale": "Inclusive mode keeps the deliverability voice for an investment case."},
+    {"text": "Collapses the engineer level (e.g. Maria Oliveira / Jonas Bakker) to a 'represented by' note", "rationale": "Still one voice at the maker level."},
+    {"text": "Flags the unprofiled senior/escalation chain (Mark van Dijk / Jeroen Meijer / Miguel Santos) in the gap note", "rationale": "Strategy altitude lives in the unprofiled chain."},
+    {"text": "Every ranked stakeholder has a 1-10 score and rationale, ordered; no fabricated people in the ranked list", "rationale": "Core output requirements."}
+  ]
+}

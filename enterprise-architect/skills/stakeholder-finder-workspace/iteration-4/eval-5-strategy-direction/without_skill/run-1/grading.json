@@ -1,0 +1,45 @@
+{
+  "expectations": [
+    {
+      "text": "States the meeting type AND which room-breadth mode it used (tight vs inclusive)",
+      "passed": false,
+      "evidence": "No mode."
+    },
+    {
+      "text": "Selects TIGHT (leadership-only) mode and justifies it from the direction-only / no-deliverability framing",
+      "passed": false,
+      "evidence": "No mode reasoning."
+    },
+    {
+      "text": "Surfaces Bram Hendriks as the single payments-line voice in the ranked list",
+      "passed": false,
+      "evidence": "Stacks Aisha + Bram."
+    },
+    {
+      "text": "Aisha Khan (Tribe Lead) is collapsed to a 'represented by Bram' note, NOT ranked at top altitude",
+      "passed": false,
+      "evidence": "Aisha in core room."
+    },
+    {
+      "text": "Ranked list has one voice per payments stream (no domain-architect + tribe-lead stacking)",
+      "passed": false,
+      "evidence": "Stacked."
+    },
+    {
+      "text": "Flags the unprofiled senior/escalation chain (Mark van Dijk / Jeroen Meijer / Miguel Santos) in the gap note as the likely chair/sign-off",
+      "passed": false,
+      "evidence": "Put Mark van Dijk/Jeroen IN the core room, not a gap note."
+    },
+    {
+      "text": "Every ranked stakeholder has a 1-10 score and rationale, ordered; no fabricated people in the ranked list",
+      "passed": false,
+      "evidence": "No scores; unprofiled people in the room."
+    }
+  ],
+  "summary": {
+    "pass_rate": 0.0,
+    "passed": 0,
+    "failed": 7,
+    "total": 7
+  }
+}

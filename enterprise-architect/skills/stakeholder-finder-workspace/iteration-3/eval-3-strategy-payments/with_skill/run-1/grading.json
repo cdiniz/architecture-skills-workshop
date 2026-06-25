@@ -1,0 +1,45 @@
+{
+  "expectations": [
+    {
+      "text": "States the meeting type / altitude it sized the room for (strategic / steering / leadership level)",
+      "passed": true,
+      "evidence": "Explicit 'Strategic / steering session' framing."
+    },
+    {
+      "text": "Surfaces Bram Hendriks (Domain Architect, Payments) as the senior payments-architecture voice",
+      "passed": true,
+      "evidence": "9/10, central voice."
+    },
+    {
+      "text": "Aisha Khan (Tribe Lead \u2014 working-level delivery) is NOT placed at top altitude: she is omitted, low-scored, or explicitly noted as represented by the payments stream lead",
+      "passed": false,
+      "evidence": "MISS: Aisha ranked 8/10 (second seat) in her own right, justified via the 'different remits' caveat. Not omitted/low/represented \u2014 this is the same-stream pairing the user flagged. Calibration decision needed."
+    },
+    {
+      "text": "Does not stack two adjacent levels of the same payments reporting/functional chain in the ranked list (one voice per stream)",
+      "passed": false,
+      "evidence": "Bram (Domain Architect) and Aisha (his functional report, Tribe Lead) both ranked. Skill treated them as different concerns; user's 'ceo/tribe lead' rule suggests collapsing."
+    },
+    {
+      "text": "Flags the unprofiled senior/escalation chain (e.g. Mark van Dijk / Jeroen Meijer / Miguel Santos) as exactly the leadership a strategy session needs, in the gap note",
+      "passed": true,
+      "evidence": "Excellent: names Mark van Dijk as probable chair/sign-off, plus Miguel, Jeroen, Daan/Sanne as budget/governance."
+    },
+    {
+      "text": "Every ranked stakeholder has a 1-10 score and a rationale, ordered highest first",
+      "passed": true,
+      "evidence": "9,8,7,5 with rationale."
+    },
+    {
+      "text": "No fabricated people in the ranked list (unprofiled wiki-link people only in the gap note)",
+      "passed": true,
+      "evidence": "Chain unscored in gap note."
+    }
+  ],
+  "summary": {
+    "pass_rate": 0.7142857142857143,
+    "passed": 5,
+    "failed": 2,
+    "total": 7
+  }
+}

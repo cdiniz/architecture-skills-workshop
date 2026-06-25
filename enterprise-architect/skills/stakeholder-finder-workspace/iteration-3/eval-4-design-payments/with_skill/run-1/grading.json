@@ -1,0 +1,45 @@
+{
+  "expectations": [
+    {
+      "text": "States the meeting type / altitude it sized the room for (design / working / maker level)",
+      "passed": true,
+      "evidence": "Explicit 'design / working session' framing."
+    },
+    {
+      "text": "Surfaces Ahmed Benali (Integration Architect) and Bram Hendriks (Domain Architect, Payments) as hands-on design participants",
+      "passed": true,
+      "evidence": "Both 9/10."
+    },
+    {
+      "text": "Aisha Khan (Tribe Lead, Payments) is included at a working-relevant score, NOT dropped for being too junior",
+      "passed": true,
+      "evidence": "7/10, the delivery/maker voice; inverse of the strategy case."
+    },
+    {
+      "text": "Does not elevate a person to the top purely on seniority; a 'Head of' is only high if their discipline is core to this design",
+      "passed": true,
+      "evidence": "Carlos and Anika (Head of) both pushed to ~3 as too senior/peripheral."
+    },
+    {
+      "text": "Flags that the actual hands-on builders (unprofiled reports such as Maria Oliveira / Jonas Bakker) are missing from the wiki",
+      "passed": true,
+      "evidence": "'Represented by their stream' note names Maria/Jonas/Hannah, represented by Aisha."
+    },
+    {
+      "text": "Every ranked stakeholder has a 1-10 score and a rationale, ordered highest first",
+      "passed": true,
+      "evidence": "9,9,7,5."
+    },
+    {
+      "text": "No fabricated people in the ranked list (unprofiled wiki-link people only in the gap note)",
+      "passed": true,
+      "evidence": "Chain unscored in gap note."
+    }
+  ],
+  "summary": {
+    "pass_rate": 1.0,
+    "passed": 7,
+    "failed": 0,
+    "total": 7
+  }
+}

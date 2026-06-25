@@ -1,0 +1,45 @@
+{
+  "expectations": [
+    {
+      "text": "States the meeting type AND which room-breadth mode it used (tight vs inclusive)",
+      "passed": true,
+      "evidence": "States strategic/steering + inclusive mode."
+    },
+    {
+      "text": "Selects INCLUSIVE mode and justifies it from the 'investment case' / deliverability framing",
+      "passed": true,
+      "evidence": "Explicitly kept a feasibility voice because of investment-case framing; noted one-line switch to tight."
+    },
+    {
+      "text": "Surfaces Bram Hendriks as the senior payments-architecture voice (top of the line)",
+      "passed": true,
+      "evidence": "Bram 9, top."
+    },
+    {
+      "text": "Keeps Aisha Khan as a delivery-feasibility voice, ranked below Bram, NOT collapsed (correct under inclusive mode)",
+      "passed": true,
+      "evidence": "Aisha 7, delivery/cost feasibility."
+    },
+    {
+      "text": "Collapses the engineer level (e.g. Maria Oliveira / Jonas Bakker) to a 'represented by' note",
+      "passed": true,
+      "evidence": "Collapsed tribe members into their leads."
+    },
+    {
+      "text": "Flags the unprofiled senior/escalation chain (Mark van Dijk / Jeroen Meijer / Miguel Santos) in the gap note",
+      "passed": true,
+      "evidence": "Sponsors unscored wiki-links; Mark/Jeroen called out."
+    },
+    {
+      "text": "Every ranked stakeholder has a 1-10 score and rationale, ordered; no fabricated people in the ranked list",
+      "passed": true,
+      "evidence": "9,7,6,6,6; chain unscored."
+    }
+  ],
+  "summary": {
+    "pass_rate": 1.0,
+    "passed": 7,
+    "failed": 0,
+    "total": 7
+  }
+}

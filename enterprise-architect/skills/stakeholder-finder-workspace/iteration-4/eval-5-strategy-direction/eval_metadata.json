@@ -1,0 +1,14 @@
+{
+  "eval_id": 5,
+  "eval_name": "strategy-payments-direction-only (TIGHT expected)",
+  "prompt": "We're convening a leadership steering session to set the multi-year direction and priorities for payments — purely the strategic direction and mandate, not a delivery or costing exercise. Who should be in the room?",
+  "assertions": [
+    {"text": "States the meeting type AND which room-breadth mode it used (tight vs inclusive)", "rationale": "Toggle must be made visible."},
+    {"text": "Selects TIGHT (leadership-only) mode and justifies it from the direction-only / no-deliverability framing", "rationale": "No investment/deliverability signal should select tight."},
+    {"text": "Surfaces Bram Hendriks as the single payments-line voice in the ranked list", "rationale": "Tight mode: senior represents the line."},
+    {"text": "Aisha Khan (Tribe Lead) is collapsed to a 'represented by Bram' note, NOT ranked at top altitude", "rationale": "Tight mode collapses the same-line delivery lead into the leader."},
+    {"text": "Ranked list has one voice per payments stream (no domain-architect + tribe-lead stacking)", "rationale": "The user's core one-voice-per-stream requirement under tight mode."},
+    {"text": "Flags the unprofiled senior/escalation chain (Mark van Dijk / Jeroen Meijer / Miguel Santos) in the gap note as the likely chair/sign-off", "rationale": "Strategy altitude lives in the unprofiled chain."},
+    {"text": "Every ranked stakeholder has a 1-10 score and rationale, ordered; no fabricated people in the ranked list", "rationale": "Core output requirements."}
+  ]
+}
