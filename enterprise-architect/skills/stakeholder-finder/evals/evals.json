@@ -98,6 +98,22 @@
         "Flags the unprofiled senior chain in the gap note as the likely chair/sign-off",
         "Scores 1-10 with rationale, ordered; no fabricated people in the ranked list"
       ]
+    },
+    {
+      "id": 6,
+      "name": "data-product-design-deep-chain (one voice per stream, full depth)",
+      "prompt": "We're running a hands-on design session for a new regulatory risk-reporting data product — we need to nail the data model, how it's built, and how it's governed. Who should be in the room?",
+      "expected_output": "Design altitude. The deep data-architecture chain (Fatima -> Anika -> Lotte -> Eva, one concern) collapses to ONE voice (Eva, the maker); Lotte/Anika/Fatima represented-by. Separate seats only for genuine remit forks: data-engineering (Sofia), governance (Floor), compliance (Charlotte). Table carries a Stream column; no two rows share a stream tag. Regression test for the levels-not-streams failure.",
+      "files": ["enterprise-architect/syntethic-data/"],
+      "assertions": [
+        "Sizes it as a design / working / maker-level session and states so",
+        "The data-architecture stream contributes exactly ONE voice (Eva Timmermans); Lotte Peters is NOT also ranked",
+        "Lotte Peters, Anika Sharma and Fatima El-Youssef are 'represented by' (not in the ranked list)",
+        "A separate data-engineering voice (Sofia Costa or David Cohen) appears as a genuine remit fork",
+        "A separate data-governance voice (Floor van der Berg) appears as a genuine remit fork",
+        "No two ranked rows share the same stream tag (Stream column present)",
+        "Table with full name, role, stream, rationale, 1-10 score; no fabricated people in the ranked list"
+      ]
     }
   ]
 }

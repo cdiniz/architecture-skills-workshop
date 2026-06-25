@@ -1,0 +1,14 @@
+{
+  "eval_id": 6,
+  "eval_name": "data-product-design-deep-chain",
+  "prompt": "We're running a hands-on design session for a new regulatory risk-reporting data product — we need to nail the data model, how it's built, and how it's governed. Who should be in the room?",
+  "assertions": [
+    {"text": "Sizes it as a design / working / maker-level session and states so", "rationale": "Meeting-type altitude."},
+    {"text": "The data-architecture/modelling stream contributes exactly ONE voice (Eva Timmermans, the maker) — Lotte Peters is NOT also ranked", "rationale": "THE failure case: Lotte (Lead) + Eva (her report) both ranked stacks one stream."},
+    {"text": "Lotte Peters, Anika Sharma and Fatima El-Youssef are marked 'represented by' (not in the ranked list)", "rationale": "Whole architecture chain collapses to one voice; trim above and below."},
+    {"text": "A separate data-engineering voice appears (Sofia Costa or David Cohen, one of them) as a genuine remit fork", "rationale": "Build is a different remit from model."},
+    {"text": "A separate data-governance voice appears (Floor van der Berg) as a genuine remit fork", "rationale": "Govern is a different remit from model/build."},
+    {"text": "No two ranked rows share the same stream tag (Stream column present, one row per stream)", "rationale": "Improvement 4: streams visible; duplicates flagged."},
+    {"text": "Output is a table with full name, role, stream, rationale, and 1-10 score; no fabricated/unprofiled people in the ranked list", "rationale": "Output format + no-fabrication."}
+  ]
+}

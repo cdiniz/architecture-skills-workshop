@@ -129,20 +129,35 @@ belongs:
 So the same person can be a 9 for a design session and a 3 for a strategy session, or
 vice versa. Let the meeting type move the scores, and say it did.
 
-**One voice per stream.** Don't invite two adjacent levels of the *same reporting or
-functional chain* — a lead architect and an architect under them, or a head and a
-tribe lead in the same line. The Relationships section is how you spot it: if one
-person sits in another's management/functional chain (directly or transitively) and
-they'd speak to the *same* concern, they're one stream. Pick the single person at the
-altitude the meeting calls for, and note whom they stand in for, rather than stacking
-the chain. A senior in a strategy session already represents the team below; the
-hands-on person in a design session is the one who matters, not their boss.
+**One voice per stream.** A stream is defined by **remit, not level.** A reporting
+line four deep (CDO → Head → Lead → Architect) is still **one** stream and yields
+**one** voice — extra levels don't earn extra seats. This is the rule that's easiest
+to break, because the moment you trim the leaders off the top of a deep chain it's
+tempting to treat the surviving rungs as independent people. They aren't: they're
+still the same ladder. A *second* seat is justified only when the remit genuinely
+**forks** — design vs build vs govern — not when the title changes rung.
 
-Be careful not to over-collapse: people in the same domain with **genuinely different
-remits** (architecture vs delivery vs compliance) are *different* streams of concern
-and may both belong — collapse only when one truly substitutes for the other on this
-issue. When you drop someone for this reason, move them to a "represented by …" note
-rather than deleting them silently, so the user can overrule you.
+Make this a procedure, not something to notice in passing — eyeballing fails exactly
+on the deep chains where it matters most:
+
+1. **Group into streams by tracing each relevant person's chain to its FULL depth.**
+   Walk the Relationships section up *and* down — manager, functional leader, and
+   reports, transitively — not just one level. Two people are in the same stream if
+   one sits anywhere in the other's reporting/functional chain *and* they speak to the
+   same concern. Label each stream by its remit (e.g. `data-architecture`,
+   `data-engineering`, `governance`, `integration`).
+2. **Pick one voice per stream — the person at the meeting's altitude.** For a design
+   session that's the hands-on maker at the bottom of the chain; for a strategy session
+   it's the leader near the top. Mark *everyone else in that chain* — above **and**
+   below the person you kept — as "represented by …". Don't stop after dropping the
+   leaders; the rungs beneath them are the same stream.
+
+The fork test keeps you from over-collapsing: people in the same domain with
+**genuinely different remits** (architecture vs delivery vs governance vs compliance)
+are *different* streams and may each hold a seat — collapse only when one truly
+substitutes for the other on this issue. When you drop someone, move them to a
+"represented by …" note rather than deleting them silently, so the user can overrule
+you.
 
 **The room-breadth toggle.** There's one case where reasonable people disagree: a
 *same-line, different-remit* second voice — most often a tribe/delivery lead sitting
@@ -188,6 +203,16 @@ rather than padding the list. A good rough calibration:
 Don't invent precision. The score is a judgement to help the user prioritise who to
 approach first, not a measurement — so make the *rationale* carry the weight.
 
+**Verification gate — do this before you finalise.** The one-voice-per-stream rule is
+the easiest to violate without noticing, so check it explicitly rather than trusting
+that you applied it. For **every** name on the ranked list, write its stream label,
+then ask: does any *other* listed person sit in its reporting/functional chain
+(directly or transitively) and speak to the same concern? If yes, you've stacked a
+stream — keep the one at the meeting's altitude and move the other to "represented
+by". The list isn't done until **no two names share a chain at the same concern**.
+This single pass catches the deep-chain stacking (e.g. a Lead Data Architect *and* an
+architect who reports to them) that altitude-trimming from the top misses.
+
 ## Output format
 
 Lead with a one-line read of the issue **and the meeting type (and room-breadth mode,
@@ -195,14 +220,19 @@ where it applies) you're sizing the room for** — including any assumptions you
 Then present the relevant stakeholders as a **table, ordered by score, highest first**:
 
 ```markdown
-| Stakeholder | Role | Why relevant | Score |
-|-------------|------|--------------|-------|
-| <Full name> | <Role from their entry> | <1–2 sentences: which axis drives it — remit (they own/sign off), concern (their stated lens), or structural (programme / dotted-line / reporting chain); cite a specific remit or concern line where it applies; say so if the meeting type moved their score (too senior/junior for this room). End with what to ask or align on if useful.> | <N>/10 |
+| Stakeholder | Role | Stream | Why relevant | Score |
+|-------------|------|--------|--------------|-------|
+| <Full name> | <Role from their entry> | <one-word stream tag> | <1–2 sentences: which axis drives it — remit (they own/sign off), concern (their stated lens), or structural (programme / dotted-line / reporting chain); cite a specific remit or concern line where it applies; say so if the meeting type moved their score (too senior/junior for this room). End with what to ask or align on if useful.> | <N>/10 |
 ```
 
-Use the person's **full name** and the role exactly as their entry states it. Keep
-each rationale tight enough to read in a table cell but specific enough that the
-*reason* is clear — a row with a vague rationale is the failure mode to avoid.
+Use the person's **full name** and the role exactly as their entry states it. The
+**Stream** column carries the one-word remit tag you assigned in step 3 (e.g.
+`data-architecture`, `data-engineering`, `governance`, `integration`, `payments`) —
+it exists so that **two rows sharing a tag are an immediate visual flag** that you may
+have stacked a stream; if you see a repeat, it must be a deliberate remit fork you can
+justify, not an oversight. Keep each rationale tight enough to read in a table cell
+but specific enough that the *reason* is clear — a row with a vague rationale is the
+failure mode to avoid.
 
 Then close with up to three short boundary notes below the table, so the shortlist's
 edges are legible and the user can catch a miss:

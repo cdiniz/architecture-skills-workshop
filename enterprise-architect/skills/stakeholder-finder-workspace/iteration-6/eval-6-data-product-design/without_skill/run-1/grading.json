@@ -1,0 +1,45 @@
+{
+  "expectations": [
+    {
+      "text": "Sizes it as a design / working / maker-level session and states so",
+      "passed": true,
+      "evidence": "Treated as hands-on session, excluded CDO."
+    },
+    {
+      "text": "The data-architecture/modelling stream contributes exactly ONE voice (Eva Timmermans, the maker) \u2014 Lotte Peters is NOT also ranked",
+      "passed": false,
+      "evidence": "FAILURE REPRODUCED: Eva AND Lotte both in the core room."
+    },
+    {
+      "text": "Lotte Peters, Anika Sharma and Fatima El-Youssef are marked 'represented by' (not in the ranked list)",
+      "passed": false,
+      "evidence": "Lotte ranked in the room, not represented."
+    },
+    {
+      "text": "A separate data-engineering voice appears (Sofia Costa or David Cohen, one of them) as a genuine remit fork",
+      "passed": true,
+      "evidence": "Sofia + David present (engineering voice exists, though also stacked)."
+    },
+    {
+      "text": "A separate data-governance voice appears (Floor van der Berg) as a genuine remit fork",
+      "passed": true,
+      "evidence": "Floor included."
+    },
+    {
+      "text": "No two ranked rows share the same stream tag (Stream column present, one row per stream)",
+      "passed": false,
+      "evidence": "No stream column; stacks Eva+Lotte and Sofia+David."
+    },
+    {
+      "text": "Output is a table with full name, role, stream, rationale, and 1-10 score; no fabricated/unprofiled people in the ranked list",
+      "passed": false,
+      "evidence": "Prose grouping, no scores, no stream column."
+    }
+  ],
+  "summary": {
+    "pass_rate": 0.42857142857142855,
+    "passed": 3,
+    "failed": 4,
+    "total": 7
+  }
+}
